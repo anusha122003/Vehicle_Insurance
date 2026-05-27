@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AutoShield — Vehicle Claims Visual Audit Console</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --colors-primary: #0066cc;
+      --colors-primary-focus: #0071e3;
+      --colors-primary-on-dark: #2997ff;
+      --colors-ink: #1d1d1f;
+      --colors-body: #1d1d1f;
+      --colors-body-on-dark: #ffffff;
+      --colors-body-muted: #cccccc;
+      --colors-ink-muted-80: #333333;
+      --colors-ink-muted-48: #7a7a7a;
+      --colors-divider-soft: #f0f0f0;
+      --colors-hairline: #e0e0e0;
+      --colors-canvas: #ffffff;
+      --colors-canvas-parchment: #f5f5f7;
+      --colors-surface-pearl: #fafafc;
+      --colors-surface-tile-1: #272729;
+      --colors-surface-tile-2: #2a2a2c;
+      --colors-surface-tile-3: #252527;
+      --colors-surface-black: #000000;
+      --colors-on-primary: #ffffff;
+      --colors-on-dark: #ffffff;
+      --rounded-none: 0px;
+      --rounded-sm: 8px;
+      --rounded-md: 11px;
+      --rounded-lg: 18px;
+      --rounded-pill: 9999px;
+      --rounded-full: 9999px;
+      --font-sans: 'Inter', -apple-system, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--colors-canvas-parchment);
+      color: var(--colors-ink);
+      font-size: 17px;
+      line-height: 1.47;
+      letter-spacing: -0.022em;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* Pinned Global Nav */
+    .global-nav {
+      width: 100%;
+      height: 44px;
+      background-color: var(--colors-surface-black);
+      color: var(--colors-on-dark);
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      z-index: 100;
+      position: relative;
+    }
+
+    .brand-section {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+      opacity: 0.6;
+    }
+
+    .scope-badge {
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+      background-color: var(--colors-ink-muted-80);
+      color: var(--colors-body-muted);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    /* Frosted Sticky Sub Nav */
+    .frosted-subnav {
+      position: sticky;
+      top: 0;
+      z-index: 90;
+      background-color: rgba(255, 255, 255, 0.8);
+      backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid var(--colors-divider-soft);
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+    }
+
+    .subnav-title {
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    /* Alternating Tiles */
+    .tile-section {
+      width: 100vw;
+      padding: 80px 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .tile-light {
+      background-color: var(--colors-canvas);
+      color: var(--colors-ink);
+    }
+
+    .tile-dark {
+      background-color: var(--colors-surface-tile-1);
+      color: var(--colors-on-dark);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .tile-parchment {
+      background-color: var(--colors-canvas-parchment);
+      color: var(--colors-ink);
+    }
+
+    .tagline {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--colors-primary);
+      margin-bottom: 12px;
+    }
+
+    .tile-dark .tagline {
+      color: var(--colors-primary-on-dark);
+    }
+
+    .hero-title {
+      font-size: 56px;
+      font-weight: 600;
+      line-height: 1.07;
+      letter-spacing: -0.028em;
+      margin-bottom: 24px;
+      max-width: 820px;
+    }
+
+    .hero-lead {
+      font-size: 24px;
+      font-weight: 300;
+      line-height: 1.5;
+      color: var(--colors-ink-muted-48);
+      max-width: 680px;
+      margin: 0 auto 40px;
+    }
+
+    .tile-dark .hero-lead {
+      color: var(--colors-body-muted);
+    }
+
+    /* Primary buttons */
+    .btn-row {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+    }
+
+    .btn {
+      font-size: 17px;
+      font-weight: 400;
+      padding: 12px 28px;
+      border-radius: var(--rounded-pill);
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+      background-color: var(--colors-primary);
+      color: var(--colors-on-primary);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--colors-primary-focus);
+    }
+
+    .btn-secondary {
+      background-color: transparent;
+      color: var(--colors-primary);
+      border: 1px solid var(--colors-primary);
+    }
+
+    .btn-secondary-dark {
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Premium Console Layout */
+    .console-mockup {
+      width: 100%;
+      max-width: 900px;
+      margin-top: 64px;
+      background-color: var(--colors-canvas);
+      border-radius: var(--rounded-lg);
+      border: 1px solid var(--colors-hairline);
+      box-shadow: rgba(0, 0, 0, 0.15) 3px 5px 30px 0px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .console-bar {
+      height: 36px;
+      background-color: var(--colors-surface-pearl);
+      border-bottom: 1px solid var(--colors-divider-soft);
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      gap: 8px;
+    }
+
+    .console-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: var(--rounded-full);
+    }
+    .console-dot.red { background-color: #ff5f56; }
+    .console-dot.yellow { background-color: #ffbd2e; }
+    .console-dot.green { background-color: #27c93f; }
+
+    .console-body {
+      padding: 32px;
+      background-color: var(--colors-canvas-parchment);
+      display: flex;
+      gap: 24px;
+      text-align: left;
+    }
+
+    .console-col {
+      flex: 1;
+      background-color: var(--colors-canvas);
+      padding: 24px;
+      border-radius: var(--rounded-md);
+      border: 1px solid var(--colors-divider-soft);
+    }
+
+    .console-col-tag {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--colors-primary);
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .console-col-title {
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .stats-box-grid {
+      display: grid;
+      grid-template-cols: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .stat-card {
+      background-color: var(--colors-surface-pearl);
+      padding: 16px;
+      border-radius: var(--rounded-sm);
+      border: 1px solid var(--colors-divider-soft);
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: var(--colors-ink-muted-48);
+    }
+
+    .stat-val {
+      font-size: 22px;
+      font-weight: 700;
+      margin-top: 4px;
+    }
+
+    /* Visual Assessor HUD Mockup */
+    .assessor-container {
+      width: 100%;
+      max-width: 900px;
+      background-color: var(--colors-surface-tile-2);
+      border-radius: var(--rounded-lg);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      text-align: left;
+      overflow: hidden;
+      min-height: 400px;
+      margin-top: 40px;
+    }
+
+    .pane-upload {
+      flex: 1;
+      padding: 40px;
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .pane-results {
+      flex: 1;
+      padding: 40px;
+      background-color: var(--colors-surface-tile-3);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .dropzone-mock {
+      width: 256px;
+      height: 180px;
+      border-radius: var(--rounded-md);
+      border: 2px dashed rgba(255, 255, 255, 0.2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--colors-body-muted);
+      cursor: pointer;
+    }
+
+    .severity-pill {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background-color: rgba(239, 68, 68, 0.2);
+      color: #f87171;
+    }
+
+    .result-row {
+      margin-bottom: 20px;
+    }
+
+    .result-lbl {
+      font-size: 12px;
+      color: var(--colors-body-muted);
+      margin-bottom: 6px;
+    }
+
+    .result-val {
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .pct-val {
+      font-size: 32px;
+      font-weight: 900;
+      color: var(--colors-primary-on-dark);
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 9999px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background-color: #ef4444;
+      border-radius: 9999px;
+    }
+
+    /* KPI Deck */
+    .kpi-deck {
+      width: 100%;
+      max-width: 900px;
+      display: grid;
+      grid-template-cols: repeat(4, 1fr);
+      gap: 16px;
+      margin-top: 40px;
+    }
+
+    .kpi-card {
+      background-color: var(--colors-canvas);
+      border: 1px solid var(--colors-hairline);
+      border-radius: var(--rounded-lg);
+      padding: 20px;
+      text-align: left;
+      min-height: 140px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .kpi-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--colors-ink-muted-48);
+    }
+
+    .kpi-val {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--colors-ink);
+    }
+
+    .kpi-footer {
+      font-size: 11px;
+      color: var(--colors-ink-muted-48);
+    }
+
+    /* Premium Editorial Footer */
+    .premium-footer {
+      width: 100vw;
+      background-color: var(--colors-canvas-parchment);
+      border-top: 1px solid var(--colors-hairline);
+      padding: 64px 40px;
+      color: var(--colors-ink-muted-80);
+      text-align: left;
+    }
+
+    .footer-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-cols: repeat(4, 1fr);
+      gap: 40px;
+    }
+
+    .footer-col-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--colors-ink);
+      margin-bottom: 16px;
+    }
+
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 12px;
+      color: var(--colors-ink-muted-48);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Global Nav -->
+  <nav className="global-nav">
+    <div class="global-nav">
+      <div class="brand-section">🚗 AutoShield</div>
+      <ul class="nav-links" style="display: flex; gap: 20px;">
+        <li>AI Assessor</li>
+        <li>Claims System</li>
+        <li>Dashboard</li>
+      </ul>
+      <span class="scope-badge">Static Demonstration</span>
+    </div>
+  </nav>
+
+  <!-- Subnav -->
+  <div class="frosted-subnav">
+    <span class="subnav-title">Console Preview</span>
+    <button class="btn btn-primary" style="padding: 6px 16px; font-size: 14px;">Demo Launch</button>
+  </div>
+
+  <!-- Hero Tile -->
+  <section class="tile-section tile-light">
+    <span class="tagline">Photography-First System</span>
+    <h1 class="hero-title">Where physical damage meets digital intelligence.</h1>
+    <p class="hero-lead">AutoShield maps YOLOv8 object classifications to adaptive OpenCV contours for absolute, fraud-proof claim diagnostics.</p>
+    <div class="btn-row">
+      <button class="btn btn-primary">Run Online Audit</button>
+      <button class="btn btn-secondary">Explore Metrics</button>
+    </div>
+
+    <!-- UI Mockup Console -->
+    <div class="console-mockup">
+      <div class="console-bar">
+        <span class="console-dot red"></span>
+        <span class="console-dot yellow"></span>
+        <span class="console-dot green"></span>
+        <span class="console-bar-title">autoshield-dashboard-console.sys</span>
+      </div>
+      <div class="console-body">
+        <div class="console-col">
+          <span class="console-col-tag">Claims Matrix</span>
+          <div class="console-col-title">Operational Overview</div>
+          <div class="stats-box-grid">
+            <div class="stat-card">
+              <span class="stat-label">Claims Processed</span>
+              <div class="stat-val">15,400+</div>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Net Claims Saved</span>
+              <div class="stat-val" style="color: #27c93f;">$4.2M</div>
+            </div>
+          </div>
+        </div>
+        <div class="console-col" style="display: flex; align-items: center; justify-content: center;">
+          <div style="text-align: center;">
+            <div style="font-size: 24px; margin-bottom: 8px;">⚡</div>
+            <span class="body-strong" style="font-weight: 600; display: block;">YOLOv8 Edge Core Active</span>
+            <p style="font-size: 12px; color: var(--colors-ink-muted-48); margin-top: 4px;">Awaiting real-time collision diagnostic feed</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Assessor Section (Dark) -->
+  <section class="tile-section tile-dark">
+    <span class="tagline">Neural HUD Diagnostics</span>
+    <h1 class="hero-title">Real-Time Collision Assessor</h1>
+    <p class="hero-lead">Quantify impact severity and net payout liabilities instantly inside our visual sandbox.</p>
+
+    <div class="assessor-container">
+      <div class="pane-upload">
+        <span class="assessor-pane-header">Collision Feed</span>
+        <div class="dropzone-mock">
+          <span style="font-size: 32px; margin-bottom: 8px;">📷</span>
+          <span style="font-weight: 600; color: #fff;">Interactive Upload Zone</span>
+          <span style="font-size: 11px; opacity: 0.6; margin-top: 4px;">Click to load vehicle image</span>
+        </div>
+        <button class="btn btn-primary" style="background-color: var(--colors-primary-on-dark);">Simulate Assess</button>
+      </div>
+      <div class="pane-results">
+        <div class="severity-pill" style="align-self: flex-end;">Severe Collision</div>
+        <div class="result-row">
+          <span class="result-lbl">Assessed Damage Type</span>
+          <div class="result-val">Dent (Impact Cluster)</div>
+        </div>
+        <div class="result-row">
+          <span class="result-lbl">Geometric Surface Area</span>
+          <div class="pct-val">34.8%</div>
+          <div class="progress-track">
+            <div class="progress-fill" style="width: 34.8%;"></div>
+          </div>
+        </div>
+        <div style="font-size: 10px; opacity: 0.4; display: flex; justify-content: space-between;">
+          <span>Engine: YOLOv8n-cls</span>
+          <span>Status: Mock Active</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- KPI Cards (Parchment) -->
+  <section class="tile-section tile-parchment">
+    <span class="tagline">Audit Analytics Deck</span>
+    <h1 class="hero-title" style="font-size: 40px; margin-bottom: 12px;">Operational Intelligence</h1>
+    
+    <div class="kpi-deck">
+      <div class="kpi-card">
+        <span class="kpi-title">Gross Registry</span>
+        <div class="kpi-val">15,432</div>
+        <span class="kpi-footer">Collision records</span>
+      </div>
+      <div class="kpi-card" style="background-color: rgba(239, 68, 68, 0.05); border-color: #fee2e2;">
+        <span class="kpi-title">Active Fraud Rate</span>
+        <div class="kpi-val" style="color: #ef4444;">6.1%</div>
+        <span class="kpi-footer">Flagged audits</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-title">Payout Liability</span>
+        <div class="kpi-val">$3.68M</div>
+        <span class="kpi-footer">Net payout sums</span>
+      </div>
+      <div class="kpi-card">
+        <span class="kpi-title">Mean Impact</span>
+        <div class="kpi-val" style="color: var(--colors-primary);">28.4%</div>
+        <span class="kpi-footer">Collision contour area</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="premium-footer">
+    <div class="footer-inner">
+      <div>
+        <h4 class="footer-col-title">AutoShield</h4>
+        <p class="footer-desc">Premium insurance claim solutions framed by machine intelligence.</p>
+      </div>
+      <div>
+        <h4 class="footer-col-title">Framework</h4>
+        <ul class="footer-links">
+          <li>React Single Page</li>
+          <li>FastAPI Router</li>
+          <li>YOLOv8 Edge Net</li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="footer-col-title">Links</h4>
+        <ul class="footer-links">
+          <li>System Status</li>
+          <li>Privacy Policy</li>
+          <li>Legal Terms</li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="footer-col-title">Network</h4>
+        <div style="font-size: 12px; font-weight: 600; color: var(--colors-primary); display: flex; align-items: center; gap: 6px;">
+          <span style="width: 8px; height: 8px; background-color: #22c55e; border-radius: 50%;"></span>
+          Operational preview online
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
