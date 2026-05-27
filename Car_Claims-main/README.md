@@ -2,7 +2,7 @@
 
 AutoShield is a state-of-the-art, full-stack vehicle insurance claim management system. By combining Deep Learning (Computer Vision via YOLOv8) with traditional Computer Vision (OpenCV contours) and a high-performance **React (Vite) + FastAPI** architecture, AutoShield automates physical damage assessment, verifies claim legitimacy, estimates payouts, and manages fraud exposure.
 
-The user interface strictly implements a **photography-first Apple design aesthetic**—alternating light and dark full-bleed canvas sections, negative letter-spaced headlines, a single brand accent color (**Action Blue #0066cc**), and a museum-gallery presentation layout.
+The user interface strictly implements a **photography-first Apple design aesthetic**—alternating light and dark full-bleed canvas sections, negative letter-spaced headlines, a single brand accent color (**Action Blue `#0066cc`**), and a museum-gallery presentation layout.
 
 ---
 
@@ -28,6 +28,48 @@ To achieve a scalable, enterprise-ready deployment, AutoShield is designed aroun
 | **Deep Learning Engine** | YOLOv8 (Ultralytics) + PyTorch | Visual damage classification (dent, scratch, glass shatter, crack, lamp broken, flat tire) |
 | **Image Analysis Engine** | OpenCV (cv2) + NumPy | Geometric contour mapping, edge density calculation, and dynamic HUD overlay generation |
 | **Database & Analytics** | PostgreSQL / Snowflake / SQLite | Tabular claim history, policy details, and analytical log storage |
+
+---
+
+## 📐 Hybrid Damage Assessment Pipeline
+
+AutoShield utilizes a two-stage hybrid approach to visual damage assessment to address common pitfalls in confidence-based estimation:
+
+```mermaid
+graph TD
+    A[Upload Vehicle Image] --> B[FastAPI REST API /api/assess]
+    B --> C{USE_YOLO Configuration}
+    
+    C -- True --> D[YOLOv8 Classifier]
+    D --> E[Classify Damage Type: scratch, dent, glass_shatter, etc.]
+    E --> F[OpenCV Contour Segmentation]
+    
+    C -- False --> G[Heuristic Path: Colour Anomaly & Edge Density]
+    G --> F
+    
+    F --> H[Compute Damage Area %: contour_area / image_area]
+    H --> I[Apply Class-Specific Multipliers & Clamping]
+    I --> J[Dynamic HUD Overlay Generation & Annotations]
+    J --> K[Return JSON + Base64 Image to Frontend]
+```
+
+### Damage Severity Matrix & Physics-Based Multipliers
+
+Damage calculations are calibrated using standard insurance industry guidelines. Each detected category has unique characteristics:
+
+| Damage Class | Severity Weight | Minimum Area Floor | Maximum Area Ceiling |
+| :--- | :---: | :---: | :---: |
+| **Scratch** | `0.6` | 2.0% | 12.0% |
+| **Lamp Broken** | `0.8` | 5.0% | 18.0% |
+| **Crack** | `0.9` | 8.0% | 22.0% |
+| **Tire Flat** | `1.0` | 10.0% | 28.0% |
+| **Dent** | `1.3` | 15.0% | 55.0% |
+| **Glass Shatter** | `1.6` | 30.0% | 80.0% |
+
+> [!NOTE]
+> The final damage percentage is computed as:
+> $$\text{Damage \%} = \text{Clamp}\left( \text{Raw Area \%} \times \text{Class Weight}, \text{Min \%}, \text{Max \%} \right)$$
+> This prevents confidence scores (how sure the model is of the class) from inflating physical damage metrics, resulting in highly reliable payouts.
 
 ---
 
@@ -73,7 +115,7 @@ Car_Claims-main/
 
 ## 🚀 Active Development & Quick Start
 
-The local environment is fully configured and verified to run successfully on Windows. 
+The local environment is fully configured and verified to run successfully on Windows.
 
 ### Development Roadmap
 
@@ -82,32 +124,54 @@ For the complete 8-week production SaaS deployment checklist, refer to:
 
 ### Running the Services
 
-1. **Backend REST API** is active and listening on:
-   ```url
-   http://localhost:8000
-   ```
-   *To start manually:*
-   ```powershell
-   .\venv\Scripts\python.exe main.py
-   ```
+#### 1. Backend REST API
+The FastAPI backend is active and listening on `http://localhost:8000`.
 
-2. **React Frontend client** is active and running on:
-   ```url
-   http://localhost:5173
-   ```
-   *To start manually:*
-   ```powershell
-   cd frontend
-   npm run dev
-   ```
+To start manually:
+```powershell
+# Activate virtual environment and run main.py
+.\venv\Scripts\python.exe main.py
+```
 
-### Operational Pipeline Tools
+Available API Endpoints:
+- `GET /api/claims` - List claims with active filters (year, make, base policy, fraud status).
+- `GET /api/filters` - Fetch unique filter options populated dynamically from dataset.
+- `GET /api/metrics` - Fetch real-time KPI data (total claims, fraud rates, average payout, etc.).
+- `POST /api/assess` - Real-time damage detection. Accepts an image upload, runs YOLOv8 + OpenCV contours, and returns predictions.
 
-- **Tabular Data Mapper**: Re-map historical claims and update estimated payouts with:
-  ```powershell
-  .\venv\Scripts\python.exe dataset_mapper.py
-  ```
-- **Custom AI Damage Inference**: Test damage detection predictions directly on a local vehicle image with:
-  ```powershell
-  .\venv\Scripts\python.exe role2/damage_detector.py path/to/vehicle.jpg
-  ```
+#### 2. React Frontend Client
+The React frontend client is active and running on `http://localhost:5173`.
+
+To start manually:
+```powershell
+cd frontend
+npm run dev
+```
+
+---
+
+## 🛠️ Operational Pipeline & Command Utilities
+
+### Tabular Data Mapper
+Bridge the gap between raw historical claims and visual computer vision percentages. This script generates the final `processed_claims.csv` used by the active metrics dashboard:
+```powershell
+.\venv\Scripts\python.exe dataset_mapper.py
+```
+
+### Custom AI Damage Inference
+Perform rapid local testing of the visual damage assessment module on any vehicle photograph:
+```powershell
+.\venv\Scripts\python.exe role2/damage_detector.py path/to/vehicle.jpg
+```
+
+---
+
+## 📊 Analytics and Business Intelligence
+
+The database layer runs standard SQL queries compatible with Snowflake and PostgreSQL to compute operational indicators. You can find pre-built analytical templates in [analytics_queries.sql](file:///d:/Car_Claims-main/Car_Claims-main/role6/analytics_queries.sql).
+
+Key metrics handled by the analytics engine:
+* **Monthly Claims & Fraud Trend** - Identifies seasonal spikes in insurance claims.
+* **Claims & Fraud by Vehicle Make** - Isolates high-risk auto manufacturers.
+* **Urban vs Rural Fraud Rate** - Tracks geographic patterns in claim legitimacy.
+* **High-Risk Claims (Fraud Indicators)** - Surfaces claims filed without a police report or witnesses that were subsequently marked fraudulent.
