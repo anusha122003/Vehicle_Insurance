@@ -1,7 +1,7 @@
 import os
 import shutil
 import pandas as pd
-from fastapi import FastAPI, UploadFile, File, Query
+from fastapi import FastAPI, UploadFile, File, Query, Form
 from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
 from typing import List, Optional
@@ -121,7 +121,11 @@ UPLOAD_DIR = Path(__file__).parent / "temp_uploads"
 UPLOAD_DIR.mkdir(exist_ok=True)
 
 @app.post("/api/assess")
-async def assess_car_damage(file: UploadFile = File(...)):
+async def assess_car_damage(
+    file: UploadFile = File(...),
+    vehicle_price: float = Form(25000.0),
+    deductible: float = Form(500.0)
+):
     # Save uploaded file
     file_path = UPLOAD_DIR / file.filename
     with open(file_path, "wb") as buffer:
@@ -129,7 +133,7 @@ async def assess_car_damage(file: UploadFile = File(...)):
         
     try:
         # Assess damage using hybrid AI-CV model
-        result = assess_damage(str(file_path))
+        result = assess_damage(str(file_path), vehicle_price=vehicle_price, deductible=deductible)
         
         # Cleanup uploaded file if requested, or keep it as history
         if file_path.exists():

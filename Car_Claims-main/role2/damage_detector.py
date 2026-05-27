@@ -96,12 +96,13 @@ def _compute_damage_from_contour(img_bgr: np.ndarray,
     enhanced = clahe.apply(l_channel)
 
     # ── Edge detection ─────────────────────────────────────────────────────────
-    blurred = cv2.GaussianBlur(enhanced, (5, 5), 0)
-    edges   = cv2.Canny(blurred, threshold1=40, threshold2=120)
+    # OPTIMIZATION: Bilateral filter preserves sharp scratch/dent edges better than Gaussian blur
+    blurred = cv2.bilateralFilter(enhanced, d=9, sigmaColor=75, sigmaSpace=75)
+    edges   = cv2.Canny(blurred, threshold1=35, threshold2=110)
 
     # ── Morphological closing: connect nearby edge fragments ──────────────────
     # Larger kernel = merges more fragments (good for dents/cracks that break up)
-    kernel_size = 17 if class_name in {"dent", "glass_shatter"} else 11
+    kernel_size = 19 if class_name in {"dent", "glass_shatter"} else 13
     kernel  = cv2.getStructuringElement(cv2.MORPH_RECT, (kernel_size, kernel_size))
     closed  = cv2.morphologyEx(edges, cv2.MORPH_CLOSE, kernel, iterations=2)
 
@@ -111,9 +112,19 @@ def _compute_damage_from_contour(img_bgr: np.ndarray,
     if not contours:
         return 0.0, (0, 0, 0, 0), []
 
+    # ── Filter contours by area and aspect ratio to reduce noise ───────────────
+    valid_contours = []
+    for c in contours:
+        area = cv2.contourArea(c)
+        if area > 15: # Filter out tiny noise pixels
+            valid_contours.append(c)
+
+    if not valid_contours:
+        return 0.0, (0, 0, 0, 0), []
+
     # ── Take top-3 contours by area and sum them ───────────────────────────────
     # A real dent or crack can appear as multiple fragments — we count all of them
-    sorted_contours = sorted(contours, key=cv2.contourArea, reverse=True)
+    sorted_contours = sorted(valid_contours, key=cv2.contourArea, reverse=True)
     top_contours    = sorted_contours[:3]
 
     total_damage_area = sum(cv2.contourArea(c) for c in top_contours)
@@ -320,13 +331,15 @@ def _heuristic_damage(img_bgr: np.ndarray) -> tuple[float, np.ndarray, str, str]
 # ─────────────────────────────────────────────────────────────────────────────
 #  PUBLIC API — called by the Backend (Role 5)
 # ─────────────────────────────────────────────────────────────────────────────
-def assess_damage(image_path: str) -> dict:
+def assess_damage(image_path: str, vehicle_price: float = 25000.0, deductible: float = 500.0) -> dict:
     """
     Main entry point.
 
     Parameters
     ----------
     image_path : str  — path to the uploaded car image
+    vehicle_price : float — value of the vehicle for payout calculation
+    deductible : float — policy deductible amount
 
     Returns
     -------
@@ -336,6 +349,9 @@ def assess_damage(image_path: str) -> dict:
         severity      : str     # Minor / Moderate / Severe / Total Loss
         annotated_b64 : str     # base64 PNG for the frontend
         annotated_path: str     # saved annotated image file path
+        estimated_payout: float # calculated dynamic claim payout
+        vehicle_price : float   # echoed vehicle price
+        deductible    : float   # echoed deductible
         error         : str|None
     }
     """
@@ -364,12 +380,20 @@ def assess_damage(image_path: str) -> dict:
     _, buf = cv2.imencode(".png", annotated)
     b64    = base64.b64encode(buf).decode("utf-8")
 
+    # ── Actuarial Payout Optimization Formula ────────────────────────────
+    # Payout = max(0, (Damage% * Vehicle Price) - Deductible)
+    raw_payout = ((damage_pct / 100.0) * vehicle_price) - deductible
+    estimated_payout = max(0.0, round(raw_payout, 2))
+
     return {
         "damage_pct":     damage_pct,
         "damage_type":    damage_type,
         "severity":       severity,
         "annotated_b64":  b64,
         "annotated_path": out_path,
+        "estimated_payout": estimated_payout,
+        "vehicle_price":  vehicle_price,
+        "deductible":     deductible,
         "error":          None,
     }
 

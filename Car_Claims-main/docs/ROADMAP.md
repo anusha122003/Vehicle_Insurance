@@ -23,8 +23,8 @@ Complete checklist for building and deploying AutoShield as a production-grade S
 - [x] Create `/backend` directory structure (Already populated with `main.py`, `role2/`, etc.)
 - [x] Initialize Python virtual environment: `python -m venv venv`
 - [x] Create `requirements.txt` with dependencies
-- [ ] Set up PostgreSQL (local or Docker): `docker-compose up -d db`
-- [ ] Create `.env` file from `.env.example`
+- [x] Set up database (SQLite configured as local fallback): `sqlite:///./autoshield.db`
+- [x] Create `.env` file from `.env.example`
 - [x] Create `app/` subdirectories:
   ```
   app/
@@ -37,7 +37,7 @@ Complete checklist for building and deploying AutoShield as a production-grade S
     ├── middleware/
     └── utils/
   ```
-- [ ] Initialize database: `python -m alembic init migrations`
+- [x] Initialize database: `python -m alembic init migrations` & `alembic upgrade head`
 - [x] Test backend health: `python main.py` → `curl http://localhost:8000/health` (FastAPI backend is active!)
 
 ### Frontend Setup
@@ -68,7 +68,7 @@ Complete checklist for building and deploying AutoShield as a production-grade S
 - [x] Initialize Git: `git init`
 - [x] Create `.gitignore` (Python + Node templates)
 - [x] Create `README.md` with project overview
-- [ ] Create CONTRIBUTING.md (if team project)
+- [x] Create CONTRIBUTING.md (if team project)
 - [x] Create initial commit
 - [x] Push to GitHub/GitLab
 
