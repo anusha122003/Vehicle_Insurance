@@ -1,7 +1,9 @@
 /* src/components/FeatureCard.module.css */
 .card {
   position: relative;
-  background: var(--grad-card);
+  background: rgba(12, 18, 24, 0.4) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--bg-border);
   border-radius: var(--card-radius);
   padding: 32px;
@@ -76,8 +78,8 @@
 
 .description {
   font-family: var(--font-heading);
-  font-size: 13.5px;
-  line-height: 1.6;
+  font-size: 15px;
+  line-height: 1.75;
   color: var(--text-secondary);
 }
 

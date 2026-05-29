@@ -6,9 +6,9 @@
   right: 0;
   height: 2px;
   background: linear-gradient(90deg, var(--cyan), var(--amber));
-  z-index: 9999;
+  z-index: 1000;
   transform-origin: left;
   box-shadow: 0 0 8px rgba(0, 212, 255, 0.5);
-  transition: transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: none;
   pointer-events: none;
 }

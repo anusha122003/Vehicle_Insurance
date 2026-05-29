@@ -65,11 +65,13 @@ export default function TechStack() {
               {aiLayer.map((tech, index) => (
                 <motion.div 
                   key={index} 
-                  className={styles.techCard}
+                  className={`${styles.techCard} ${styles.aiCard}`}
                   variants={itemVariants}
                   data-hover="true"
                 >
-                  <span className={styles.name}>{tech.name}</span>
+                  <span className={styles.name}>
+                    <span className={styles.activeDot}>●</span>{tech.name}
+                  </span>
                   <span className={styles.category}>{tech.sub}</span>
                 </motion.div>
               ))}

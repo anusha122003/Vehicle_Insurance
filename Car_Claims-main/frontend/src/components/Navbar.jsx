@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Shield, Menu, X, ChevronDown } from 'lucide-react';
 import styles from './Navbar.module.css';
+import { motion } from 'framer-motion';
 
 const LANGS = ['English', 'Hindi', 'Kannada', 'Tamil'];
 const LANG_CODES = { English: 'EN', Hindi: 'HI', Kannada: 'KN', Tamil: 'TM' };
@@ -45,7 +46,12 @@ export default function Navbar({ onOpenAuth, currentLanguage, onChangeLanguage }
 
   return (
     <>
-      <header className={`${styles.navContainer} ${scrolled ? styles.scrolled : ''}`}>
+      <motion.header 
+        className={`${styles.navContainer} ${scrolled ? styles.scrolled : ''}`}
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: 'easeOut', delay: 0.1 }}
+      >
         <div className={styles.navInner}>
 
           {/* Brand logo */}
@@ -130,7 +136,7 @@ export default function Navbar({ onOpenAuth, currentLanguage, onChangeLanguage }
             </button>
           </div>
         </div>
-      </header>
+      </motion.header>
 
       {/* Mobile Drawer Overlay */}
       <div

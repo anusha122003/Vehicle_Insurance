@@ -57,7 +57,7 @@ export default function FeaturesSection() {
           {/* Feature Card 1: Damage Assessment (Col-span 2) */}
           <FeatureCard
             title="Instant Visual Damage Assessment"
-            description="Upload a photo of the damaged vehicle. Our computer vision system identifies the damage type, location, and severity — delivering a confidence score in under a second."
+            description="Upload a photo of the damaged vehicle. Our visual intelligence models instantly analyze imagery to detect structural anomalies and severity."
             icon={Eye}
             badge="DIAGNOSTIC CORE"
             className={styles.cardLarge}
@@ -86,7 +86,7 @@ export default function FeaturesSection() {
           {/* Feature Card 2: Fraud AI (Full height right column) */}
           <FeatureCard
             title="Predictive Fraud Scoring"
-            description="Every claim is evaluated against 30+ behavioral and situational signals. The system returns a fraud probability — Low, Medium, or High — before any human reviews it."
+            description="Every claim is evaluated using proprietary behavioral and situational intelligence. The system securely returns a risk probability rating before manual review."
             icon={ShieldAlert}
             badge="FRAUD INTELLIGENCE"
             className={styles.cardMedium}

@@ -1,4 +1,5 @@
 import styles from './TrustStrip.module.css';
+import { motion } from 'framer-motion';
 
 export default function TrustStrip() {
   const row1Items = [
@@ -14,7 +15,12 @@ export default function TrustStrip() {
   const dupRow2 = [...row2Items, ...row2Items, ...row2Items];
 
   return (
-    <section className={styles.marqueeSection}>
+    <motion.section 
+      className={styles.marqueeSection}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 1, delay: 1.2 }}
+    >
       <div className={styles.labelRow}>
         <span className={styles.eyebrow}>[ TRUSTED BY INSURANCE TEAMS ACROSS INDIA ]</span>
       </div>
@@ -42,6 +48,6 @@ export default function TrustStrip() {
           ))}
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }

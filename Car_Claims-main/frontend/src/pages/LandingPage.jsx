@@ -8,16 +8,24 @@ import TechStack from '../components/TechStack.jsx';
 import Testimonials from '../components/Testimonials.jsx';
 import CTASection from '../components/CTASection.jsx';
 import Footer from '../components/Footer.jsx';
+import { motion } from 'framer-motion';
 
 // v2.0 Global Interactive Overlays
 import ScrollProgressBar from '../components/ScrollProgressBar.jsx';
 import BackgroundOrbs from '../components/BackgroundOrbs.jsx';
+import CustomCursor from '../components/CustomCursor.jsx';
 
 export default function LandingPage({ onOpenAuth, currentLanguage, onChangeLanguage }) {
   return (
-    <div style={{ backgroundColor: 'var(--bg-primary)', minHeight: '100vh', color: 'var(--text-primary)', overflowX: 'hidden' }}>
+    <motion.div 
+      initial={{ backgroundColor: '#000000' }}
+      animate={{ backgroundColor: '#05070A' }} // var(--bg-void)
+      transition={{ duration: 0.4, delay: 0.05 }}
+      style={{ minHeight: '100vh', color: 'var(--text-primary)', overflowX: 'hidden' }}
+    >
       
       {/* v2.0 Interactive Overlays */}
+      <CustomCursor />
       <ScrollProgressBar />
       <BackgroundOrbs />
 
@@ -55,6 +63,6 @@ export default function LandingPage({ onOpenAuth, currentLanguage, onChangeLangu
       {/* 10. Minimal corporate footer */}
       <Footer onOpenAuth={onOpenAuth} />
 
-    </div>
+    </motion.div>
   );
 }

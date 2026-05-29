@@ -1,93 +1,67 @@
 import { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
-import { Sparkles, Cpu, Globe } from 'lucide-react';
-import { useMouseParallax } from '../utils/mouseParallax.js';
+import { motion, useAnimation } from 'framer-motion';
+import { ChevronRight, Cpu } from 'lucide-react';
 import styles from './HeroSection.module.css';
 
-export default function HeroSection({ onOpenAuth }) {
+export default function HeroSection() {
+  const [typedText, setTypedText] = useState("");
+  const fullText = "AI CLAIM ENGINE ONLINE";
+  const [typingPhase, setTypingPhase] = useState("typing");
+
+  useEffect(() => {
+    let timeout;
+    if (typingPhase === "typing") {
+      if (typedText.length === 0) {
+        // Initial delay for typewriter
+        timeout = setTimeout(() => setTypedText(fullText.slice(0, 1)), 200);
+      } else if (typedText.length < fullText.length) {
+        timeout = setTimeout(() => {
+          setTypedText(fullText.slice(0, typedText.length + 1));
+        }, 40);
+      } else {
+        timeout = setTimeout(() => setTypingPhase("done"), 2000);
+      }
+    } else if (typingPhase === "done") {
+      timeout = setTimeout(() => {
+        setTypedText("");
+        setTypingPhase("typing");
+      }, 500);
+    }
+    return () => clearTimeout(timeout);
+  }, [typedText, typingPhase]);
+
+  const [parallax, setParallax] = useState({ x: 0, y: 0, mousePos: { x: 0, y: 0 }, isHovered: false });
   const cardRef = useRef(null);
-  const parallax = useMouseParallax();
-  
-  // Dynamic stats counting state
-  const [severityVal, setSeverityVal] = useState("CALC");
-  const [confidenceVal, setConfidenceVal] = useState(0);
-  const [repairCost, setRepairCost] = useState(0);
-  const [probValue, setProbValue] = useState(0);
 
-  // Typewriter effect state for blinking cursor
-  const [eyebrowText, setEyebrowText] = useState("");
-  const eyebrowFull = "AI-POWERED CLAIMS PLATFORM";
+  const handleMouseMove = (e) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    // Calculate rotation (-1 to 1)
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const rotateX = ((y - centerY) / centerY);
+    const rotateY = ((x - centerX) / centerX);
 
-  // Telemetry stream logs
+    setParallax({ x: rotateY, y: rotateX, mousePos: { x, y }, isHovered: true });
+  };
+
+  const handleMouseLeave = () => {
+    setParallax(prev => ({ ...prev, x: 0, y: 0, isHovered: false }));
+  };
+
   const [telemetryLogs, setTelemetryLogs] = useState([
-    "SYS // CORRELATING MODEL SUITES...",
-    "SYS // FETCHING DATA BLOCK...",
+    "SYS // INITIATING NEURAL SCAN...",
+    "SYS // CONNECTING TO SATELLITE FEED..."
   ]);
 
   useEffect(() => {
-    // Eyebrow typewriter sequence
-    let currentIdx = 0;
-    const interval = setInterval(() => {
-      if (currentIdx < eyebrowFull.length) {
-        setEyebrowText(prev => prev + eyebrowFull.charAt(currentIdx));
-        currentIdx++;
-      } else {
-        clearInterval(interval);
-      }
-    }, 45);
-
-    // Dynamic metrics one-time count-up when section loads
-    const metricsTimeout = setTimeout(() => {
-      setSeverityVal("MODERATE");
-      
-      let confStart = 0;
-      const confInterval = setInterval(() => {
-        if (confStart >= 94.2) {
-          setConfidenceVal(94.2);
-          clearInterval(confInterval);
-        } else {
-          confStart += 2.1;
-          setConfidenceVal(parseFloat(confStart.toFixed(1)));
-        }
-      }, 25);
-
-      let costStart = 0;
-      const costInterval = setInterval(() => {
-        if (costStart >= 47500) {
-          setRepairCost(47500);
-          clearInterval(costInterval);
-        } else {
-          costStart += 1250;
-          setRepairCost(Math.min(costStart, 47500));
-        }
-      }, 20);
-
-      let probStart = 0;
-      const probInterval = setInterval(() => {
-        if (probStart >= 8.3) {
-          setProbValue(8.3);
-          clearInterval(probInterval);
-        } else {
-          probStart += 0.5;
-          setProbValue(parseFloat(probStart.toFixed(1)));
-        }
-      }, 30);
-
-    }, 1400);
-
-    // Telemetry log stream simulation loop
     const logsList = [
-      "SYS // FETCHING DATA BLOCK... OK",
-      "SYS // INGESTING CAMERA FRAME AS-01",
-      "YOLOv8 // INITIALIZING WEIGHTS... SYNCED",
-      "YOLOv8 // SEGMENTATION PASS STARTED",
-      "YOLOv8 // DENT DETECTED [94.2%]",
-      "YOLOv8 // SCRATCH DETECTED [87.5%]",
-      "EFF-NET // RUNNING SEVERITY MATRIX",
-      "EFF-NET // CLASSIFIED: MODERATE DAMAGE",
-      "XGBOOST // COMPUTING RISK VECTORS",
-      "XGBOOST // BEHAVIOR MATCH: 8.3% CONF",
-      "LLAMA // GENERATING DIAGNOSTICS...",
+      "SYS // DETECTED ANOMALY IN SECTOR 7",
+      "SYS // PROCESSING DAMAGE ASSESSMENT...",
+      "SYS // VERIFYING POLICY DETAILS...",
       "SYS // STREAM COMPLETED WITHOUT FAULTS"
     ];
     let logIdx = 0;
@@ -108,20 +82,11 @@ export default function HeroSection({ onOpenAuth }) {
       }
     }, 2000);
 
-    return () => {
-      clearInterval(interval);
-      clearTimeout(metricsTimeout);
-      clearInterval(logInterval);
-    };
+    return () => clearInterval(logInterval);
   }, []);
-
-  const handleMouseMove = (e) => {
-    parallax.handleMouseMove(e, cardRef);
-  };
 
   const titleText = "Claims Settled in Seconds, Not Days.";
 
-  // Page Load Framer Motion animation variants
   const staggerContainer = {
     hidden: {},
     visible: {
@@ -134,80 +99,65 @@ export default function HeroSection({ onOpenAuth }) {
 
   const wordVariant = {
     hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.7,
-        ease: [0.16, 1, 0.3, 1]
-      }
-    }
+    visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } }
   };
 
-  const subtitleVariant = {
+  const fadeUpVariant = {
     hidden: { opacity: 0, y: 15 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: 'easeOut',
-        delay: 0.8
-      }
-    }
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, delay: 0.8 } }
   };
 
   const ctaVariant = {
     hidden: { opacity: 0, scale: 0.95 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: {
-        duration: 0.4,
-        ease: 'easeOut',
-        delay: 1.0
-      }
-    }
+    visible: { opacity: 1, scale: 1, transition: { duration: 0.4, delay: 1.0 } }
   };
 
   const trustVariant = {
     hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        duration: 0.5,
-        ease: 'easeOut',
-        delay: 1.2
-      }
-    }
+    visible: { opacity: 1, transition: { duration: 1, delay: 1.2 } }
   };
 
   const cardContainerVariant = {
-    hidden: { opacity: 0, y: 40 },
-    visible: {
-      opacity: 1,
+    hidden: { opacity: 0, y: 40, rotateX: 2 },
+    visible: { 
+      opacity: 1, 
       y: 0,
-      transition: {
-        duration: 0.7,
-        ease: [0.16, 1, 0.3, 1],
-        delay: 1.4
-      }
+      rotateX: 0,
+      transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 1.4 } 
     }
   };
 
-  return (
-    <section className={styles.heroWrapper}>
-      {/* Dynamic Background Elements */}
-      <div className={styles.circuitPattern} />
+  // Magnetic Button Effect
+  const buttonRef = useRef(null);
+  const [btnPos, setBtnPos] = useState({ x: 0, y: 0 });
+  const handleBtnMove = (e) => {
+    if (!buttonRef.current) return;
+    const rect = buttonRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    setBtnPos({ x: x * 0.3, y: y * 0.3 });
+  };
+  const handleBtnLeave = () => setBtnPos({ x: 0, y: 0 });
 
+  return (
+    <section className={styles.heroWrapper} id="hero" data-cursor="default">
+      <div className={styles.circuitPattern} />
+      
       <div className={styles.heroContent}>
-        {/* Left column text details */}
+        
+        {/* Left column text content */}
         <div className={styles.textColumn}>
-          <div className={styles.badge} data-hover="true">
+          <motion.div 
+            className={styles.badge}
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+          >
             <span className={styles.badgeText}>
-              [ {eyebrowText}<span className={styles.typewriterCursor}>_</span> ]
+              {typedText}
+              <span className={styles.typewriterCursor}></span>
             </span>
-          </div>
+          </motion.div>
 
           <motion.h1 
             className={styles.title}
@@ -215,28 +165,21 @@ export default function HeroSection({ onOpenAuth }) {
             initial="hidden"
             animate="visible"
           >
-            {titleText.split(" ").map((word, idx) => {
-              const isAccent = word === "Seconds,";
-              return (
-                <motion.span 
-                  key={idx} 
-                  variants={wordVariant}
-                  className={isAccent ? styles.italicAccent : undefined}
-                  style={{ display: 'inline-block', whiteSpace: 'pre' }}
-                >
-                  {word}{" "}
-                </motion.span>
-              );
-            })}
+            {titleText.split(' ').map((word, idx) => (
+              <motion.span key={idx} variants={wordVariant} style={{ display: 'inline-block', marginRight: '0.25em' }}>
+                {word === 'Seconds,' ? <span className={styles.italicAccent}>{word}</span> : word}
+              </motion.span>
+            ))}
           </motion.h1>
 
           <motion.p 
             className={styles.subtitle}
-            variants={subtitleVariant}
+            variants={fadeUpVariant}
             initial="hidden"
             animate="visible"
           >
-            AutoShield uses computer vision and AI to process vehicle insurance claims instantly — accurate, transparent, and free of human bias.
+            Experience the future of auto insurance. Our neural engine analyzes damage instantly, 
+            approving legitimate claims before you even call a tow truck.
           </motion.p>
 
           <motion.div 
@@ -245,18 +188,17 @@ export default function HeroSection({ onOpenAuth }) {
             initial="hidden"
             animate="visible"
           >
-            <button 
-              className={`${styles.primaryButton} magnetic-btn`}
-              onClick={() => onOpenAuth('signup', 'customer')}
+            <motion.button 
+              ref={buttonRef}
+              className={styles.primaryButton}
+              onMouseMove={handleBtnMove}
+              onMouseLeave={handleBtnLeave}
+              animate={{ x: btnPos.x, y: btnPos.y }}
+              transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.1 }}
             >
-              Get Started
-              <span className={styles.btnArrow}>→</span>
-            </button>
-            <button 
-              className={styles.secondaryButton}
-              onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
-              data-hover="true"
-            >
+              Start Free Scan <ChevronRight className={styles.btnArrow} />
+            </motion.button>
+            <button className={styles.secondaryButton}>
               See How It Works ↓
             </button>
           </motion.div>
@@ -282,16 +224,19 @@ export default function HeroSection({ onOpenAuth }) {
           initial="hidden"
           animate="visible"
         >
+          {/* Ambient Back Glow */}
+          <div className={styles.visualGlow} />
+
           <div 
             ref={cardRef}
             className={styles.scanCard}
             onMouseMove={handleMouseMove}
-            onMouseLeave={parallax.handleMouseLeave}
+            onMouseLeave={handleMouseLeave}
             data-cursor="scan"
             style={{
               transform: parallax.isHovered 
-                ? `perspective(1200px) rotateX(${parallax.coords.y * -3}deg) rotateY(${parallax.coords.x * 3}deg) translateZ(10px)` 
-                : 'perspective(1200px) rotateY(-4deg) rotateX(2deg)',
+                ? `perspective(1000px) rotateX(${parallax.y * -3}deg) rotateY(${parallax.x * 3}deg) translateZ(10px)` 
+                : 'perspective(1000px)',
               transition: parallax.isHovered ? 'none' : 'transform 0.5s ease-out',
             }}
           >
@@ -360,15 +305,15 @@ export default function HeroSection({ onOpenAuth }) {
                   <span className={styles.sectionHeader}>DAMAGE ANALYSIS</span>
                   <div className={styles.readoutRow}>
                     <span className={styles.rowLabel}>Severity</span>
-                    <span className={styles.rowValAmber}>{severityVal}</span>
+                    <span className={styles.rowValAmber}>MODERATE</span>
                   </div>
                   <div className={styles.readoutRow}>
                     <span className={styles.rowLabel}>Confidence</span>
-                    <span className={styles.rowVal}>{confidenceVal}%</span>
+                    <span className={styles.rowVal}>94.2%</span>
                   </div>
                   <div className={styles.readoutRow}>
                     <span className={styles.rowLabel}>Est. Repair</span>
-                    <span className={styles.rowVal}>₹ {repairCost.toLocaleString()}</span>
+                    <span className={styles.rowVal}>₹ 12,500</span>
                   </div>
                 </div>
 
@@ -380,7 +325,7 @@ export default function HeroSection({ onOpenAuth }) {
                   </div>
                   <div className={styles.readoutRow}>
                     <span className={styles.rowLabel}>Probability</span>
-                    <span className={styles.rowVal}>{probValue}%</span>
+                    <span className={styles.rowVal}>1.8%</span>
                   </div>
                 </div>
               </div>

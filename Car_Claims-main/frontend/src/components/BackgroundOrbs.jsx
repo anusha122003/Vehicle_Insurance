@@ -58,15 +58,15 @@ export default function BackgroundOrbs() {
     <div className={styles.orbContainer}>
       <div 
         className={`${styles.orb} ${styles.orbA}`} 
-        style={{ transform: `translate(${drift.ax}px, ${drift.ay}px)` }} 
+        style={{ translate: `${drift.ax}px ${drift.ay}px` }} 
       />
       <div 
         className={`${styles.orb} ${styles.orbB}`} 
-        style={{ transform: `translate(${drift.bx}px, ${drift.by}px)` }} 
+        style={{ translate: `${drift.bx}px ${drift.by}px` }} 
       />
       <div 
         className={`${styles.orb} ${styles.orbC}`} 
-        style={{ transform: `translate(${drift.cx}px, ${drift.cy}px)` }} 
+        style={{ translate: `${drift.cx}px ${drift.cy}px` }} 
       />
     </div>
   );

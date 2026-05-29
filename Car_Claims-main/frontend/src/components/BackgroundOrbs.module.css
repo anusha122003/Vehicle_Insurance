@@ -19,9 +19,9 @@
 .orbA {
   width: 600px;
   height: 600px;
-  top: 10%;
-  right: 5%;
-  background: radial-gradient(circle, rgba(0, 212, 255, 0.09) 0%, transparent 70%);
+  top: 20%;
+  left: 60%;
+  background: radial-gradient(circle, rgba(0, 212, 255, 0.09), transparent);
   filter: blur(100px);
   animation: orb-float-a 22s ease-in-out infinite;
 }
@@ -29,9 +29,9 @@
 .orbB {
   width: 400px;
   height: 400px;
-  top: 35%;
-  left: 5%;
-  background: radial-gradient(circle, rgba(245, 158, 11, 0.05) 0%, transparent 70%);
+  top: 40%;
+  left: 10%;
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.05), transparent);
   filter: blur(120px);
   animation: orb-float-b 28s ease-in-out infinite;
 }
@@ -41,7 +41,7 @@
   height: 500px;
   bottom: 15%;
   left: 20%;
-  background: radial-gradient(circle, rgba(0, 212, 255, 0.06) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(0, 212, 255, 0.06), transparent);
   filter: blur(140px);
   animation: orb-float-c 18s ease-in-out infinite;
 }

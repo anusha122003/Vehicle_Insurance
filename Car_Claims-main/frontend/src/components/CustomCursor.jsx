@@ -34,10 +34,21 @@ export default function CustomCursor() {
           const rect = hoverable.getBoundingClientRect();
           setPillSize({ width: rect.width + 12, height: rect.height + 12 });
           
-          // Magnetic Pull Effect: translate button slightly toward cursor
-          const xOffset = (e.clientX - (rect.left + rect.width / 2)) * 0.15;
-          const yOffset = (e.clientY - (rect.top + rect.height / 2)) * 0.15;
-          hoverable.style.transform = `translate(${xOffset}px, ${yOffset}px) scale(1.02)`;
+          // Magnetic Pull Effect: translate button slightly toward cursor (max 6px)
+          const deltaX = e.clientX - (rect.left + rect.width / 2);
+          const deltaY = e.clientY - (rect.top + rect.height / 2);
+          const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+          const maxPull = 6;
+          
+          let xOffset = 0;
+          let yOffset = 0;
+          
+          if (distance > 0) {
+            xOffset = (deltaX / distance) * Math.min(distance * 0.15, maxPull);
+            yOffset = (deltaY / distance) * Math.min(distance * 0.15, maxPull);
+          }
+          
+          hoverable.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
           hoverable.style.transition = 'transform 0.08s ease-out';
         } else {
           setCursorType('hover');

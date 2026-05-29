@@ -25,7 +25,9 @@
 
 .ctaCard {
   position: relative;
-  background: var(--bg-secondary);
+  background: rgba(12, 18, 24, 0.4) !important;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   border-radius: 24px;
   padding: 80px 64px;
   overflow: hidden;
@@ -33,8 +35,15 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), inset 0 0 40px rgba(0,212,255,0.03);
   z-index: 5;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateY(0);
+}
+
+.ctaCard:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6), inset 0 0 60px rgba(0,212,255,0.08);
 }
 
 /* Rotating conic gradient border */
@@ -46,24 +55,43 @@
   background: conic-gradient(
     from var(--angle),
     transparent 0%,
-    transparent 40%,
-    rgba(0, 212, 255, 0.6) 50%,
-    transparent 60%,
+    transparent 35%,
+    rgba(0, 212, 255, 0.8) 50%,
+    transparent 65%,
     transparent 100%
   );
   z-index: -1;
-  animation: border-rotate 4s linear infinite;
+  animation: border-rotate 5s linear infinite;
+  transition: filter 0.4s ease;
+  opacity: 0.8;
+}
+
+@keyframes border-rotate {
+  from { --angle: 0deg; }
+  to { --angle: 360deg; }
+}
+
+.ctaCard:hover::before {
+  animation-duration: 2.5s;
+  filter: brightness(1.5) blur(2px);
+  opacity: 1;
 }
 
 .glow {
   position: absolute;
   top: -50%;
-  left: 25%;
-  width: 50%;
-  height: 100%;
-  background: radial-gradient(circle, rgba(0, 212, 255, 0.12) 0%, transparent 70%);
-  filter: blur(80px);
+  left: 20%;
+  width: 60%;
+  height: 120%;
+  background: radial-gradient(circle, rgba(0, 212, 255, 0.15) 0%, transparent 60%);
+  filter: blur(60px);
   pointer-events: none;
+  animation: pulseGlow 4s ease-in-out infinite alternate;
+}
+
+@keyframes pulseGlow {
+  0% { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(1.1); opacity: 1; }
 }
 
 .title {
@@ -93,8 +121,8 @@
 
 .description {
   font-family: var(--font-heading);
-  font-size: 16px;
-  line-height: 1.6;
+  font-size: 15px;
+  line-height: 1.75;
   color: var(--text-secondary);
   max-width: 520px;
   margin-bottom: 40px;
@@ -119,6 +147,7 @@
 }
 
 .primaryButton {
+  position: relative;
   background: var(--cyan);
   color: var(--bg-void);
   border: 1px solid var(--cyan);
@@ -130,12 +159,26 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+.primaryButton::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%; width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: 0.5s;
+}
+
+.primaryButton:hover::before {
+  left: 100%;
 }
 
 .primaryButton:hover {
   background: transparent;
   color: var(--cyan);
   box-shadow: 0 0 30px rgba(0, 212, 255, 0.45), inset 0 0 20px rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
 }
 
 .secondaryButton {
@@ -150,12 +193,14 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.25s ease;
+  backdrop-filter: blur(8px);
 }
 
 .secondaryButton:hover {
   background: rgba(26, 37, 48, 0.6);
   color: var(--text-primary);
   border: 1px solid rgba(0, 212, 255, 0.4);
+  transform: translateY(-2px);
 }
 
 .trustCluster {

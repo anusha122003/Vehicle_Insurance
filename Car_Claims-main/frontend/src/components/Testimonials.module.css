@@ -62,9 +62,11 @@
 }
 
 .card {
-  background: var(--grad-card);
+  background: rgba(12, 18, 24, 0.4) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--bg-border);
-  border-left: 2px solid var(--cyan);
+  border-left: 2px solid var(--cyan) !important;
   border-radius: var(--card-radius);
   padding: 32px;
   display: flex;
@@ -91,8 +93,8 @@
 
 .quote {
   font-family: var(--font-heading);
-  font-size: 14.5px;
-  line-height: 1.7;
+  font-size: 15px;
+  line-height: 1.75;
   color: var(--text-secondary);
   margin: 0 0 24px 0;
   font-style: italic;

@@ -52,18 +52,22 @@
 .description {
   font-family: var(--font-heading);
   font-size: 15px;
-  line-height: 1.6;
+  line-height: 1.75;
   color: var(--text-secondary);
 }
 
 .panelBox {
   position: relative;
-  background-color: var(--bg-secondary);
+  background: rgba(12, 18, 24, 0.4);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--bg-border);
   border-radius: 24px;
   padding: 64px;
   overflow: hidden;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 10px 50px rgba(0, 0, 0, 0.6), inset 0 0 40px rgba(0,212,255,0.02);
+  transform-style: preserve-3d;
+  perspective: 1200px;
 }
 
 @media (max-width: 768px) {
@@ -80,8 +84,15 @@
                     linear-gradient(90deg, var(--bg-border) 1px, transparent 1px);
   background-size: 40px 40px;
   pointer-events: none;
-  opacity: 0.1;
+  opacity: 0.15;
   z-index: 1;
+}
+
+.pcbGrid::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(0, 212, 255, 0.1) 0%, transparent 60%);
 }
 
 .layerGroup {
@@ -96,9 +107,13 @@
 .layerLabel {
   font-family: var(--font-body);
   font-size: 10px;
-  color: var(--text-muted);
+  color: var(--cyan);
   letter-spacing: 0.05em;
   font-weight: 600;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(0, 212, 255, 0.3);
+  padding-bottom: 4px;
+  margin-bottom: 8px;
 }
 
 .techGrid {
@@ -120,24 +135,69 @@
   }
 }
 
+/* Base card styling */
 .techCard {
-  background-color: var(--bg-surface);
-  border: 1px solid var(--bg-border);
+  position: relative;
   border-radius: var(--chip-radius);
-  padding: 20px 24px;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 24px;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   text-align: left;
+  overflow: hidden;
 }
 
-.techCard:hover {
-  border-color: rgba(0, 212, 255, 0.2);
-  background-color: var(--bg-surface-hi);
-  transform: translateY(-3px);
-  box-shadow: inset 0 0 20px rgba(0, 212, 255, 0.05);
+/* AI Layer styling - High visual hierarchy (Floating, Glowing) */
+.aiCard {
+  background: rgba(10, 16, 24, 0.7);
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(0,212,255,0.05);
+  transform: translateZ(20px);
+}
+
+.aiCard::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.5), transparent);
+}
+
+.aiCard:hover {
+  border-color: rgba(0, 212, 255, 0.6);
+  background: rgba(14, 22, 32, 0.9);
+  transform: translateZ(40px) translateY(-6px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), inset 0 0 25px rgba(0,212,255,0.15), 0 0 30px rgba(0,212,255,0.1);
+}
+
+/* Infra Layer styling - Low visual hierarchy (Recessed, Dark) */
+.techCard:not(.aiCard) {
+  background: rgba(8, 12, 16, 0.3);
+  border: 1px solid var(--bg-border);
+  box-shadow: inset 0 4px 10px rgba(0,0,0,0.5);
+}
+
+.techCard:not(.aiCard):hover {
+  border-color: rgba(255, 255, 255, 0.15);
+  background: rgba(12, 18, 24, 0.6);
+  transform: translateY(-2px);
+  box-shadow: inset 0 0 10px rgba(255,255,255,0.02);
+}
+
+.activeDot {
+  color: var(--cyan);
+  font-size: 8px;
+  margin-right: 6px;
+  vertical-align: middle;
+  text-shadow: 0 0 8px var(--cyan);
+  display: inline-block;
+  animation: pulseDot 2s infinite alternate;
+}
+
+@keyframes pulseDot {
+  from { opacity: 0.5; }
+  to { opacity: 1; text-shadow: 0 0 12px var(--cyan); }
 }
 
 .techCard:hover .name {
@@ -150,11 +210,13 @@
 
 .name {
   font-family: var(--font-body);
-  font-size: 14.5px;
-  font-weight: 500;
+  font-size: 15px;
+  font-weight: 600;
   color: var(--text-secondary);
   letter-spacing: -0.01em;
-  transition: color 0.2s ease;
+  transition: color 0.3s ease;
+  position: relative;
+  z-index: 2;
 }
 
 .category {
@@ -163,7 +225,8 @@
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  margin-top: 6px;
-  transition: color 0.2s ease;
+  margin-top: 8px;
+  transition: color 0.3s ease;
+  position: relative;
+  z-index: 2;
 }
-/* src/components/TechStack.module.css ends */
