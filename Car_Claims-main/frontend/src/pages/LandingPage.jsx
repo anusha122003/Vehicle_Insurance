@@ -14,6 +14,7 @@ import { motion } from 'framer-motion';
 import ScrollProgressBar from '../components/ScrollProgressBar.jsx';
 import BackgroundOrbs from '../components/BackgroundOrbs.jsx';
 import CustomCursor from '../components/CustomCursor.jsx';
+import FloatingChatbot from '../components/FloatingChatbot.jsx';
 
 export default function LandingPage({ onOpenAuth, currentLanguage, onChangeLanguage }) {
   return (
@@ -62,6 +63,9 @@ export default function LandingPage({ onOpenAuth, currentLanguage, onChangeLangu
 
       {/* 10. Minimal corporate footer */}
       <Footer onOpenAuth={onOpenAuth} />
+
+      {/* Floating Chatbot Assistant */}
+      <FloatingChatbot />
 
     </motion.div>
   );

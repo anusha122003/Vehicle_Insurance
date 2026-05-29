@@ -246,6 +246,7 @@
   animation: floatY 7s ease-in-out infinite;
   z-index: 2;
   transform-style: preserve-3d;
+  cursor: none;
 }
 
 .scanCard:hover {

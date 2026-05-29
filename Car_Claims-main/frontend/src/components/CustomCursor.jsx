@@ -3,87 +3,39 @@ import styles from './CustomCursor.module.css';
 
 export default function CustomCursor() {
   const [position, setPosition] = useState({ x: -100, y: -100 });
-  const [cursorType, setCursorType] = useState('default'); // 'default', 'hover', 'crosshair', 'pill'
-  const [pillSize, setPillSize] = useState({ width: 0, height: 0 });
-  const [isEnabled, setIsEnabled] = useState(false);
+  const [cursorType, setCursorType] = useState('crosshair');
+  const [isVisible, setIsVisible] = useState(false);
   const cursorRef = useRef(null);
 
   useEffect(() => {
     // Enable only if device has a fine pointer (like mouse)
     const mediaQuery = window.matchMedia('(pointer: fine)');
-    if (mediaQuery.matches) {
-      setIsEnabled(true);
-      document.body.style.cursor = 'none';
-    }
+    if (!mediaQuery.matches) return;
 
     const handleMouseMove = (e) => {
       setPosition({ x: e.clientX, y: e.clientY });
 
-      // Determine hover target state
       const target = e.target;
       if (!target) return;
 
-      const hoverable = target.closest('a, button, [role="button"], [data-hover="true"]');
       const scanCard = target.closest('[data-cursor="scan"]');
 
       if (scanCard) {
+        setIsVisible(true);
         setCursorType('crosshair');
-      } else if (hoverable) {
-        if (hoverable.classList.contains('magnetic-btn') || hoverable.tagName === 'BUTTON') {
-          setCursorType('pill');
-          const rect = hoverable.getBoundingClientRect();
-          setPillSize({ width: rect.width + 12, height: rect.height + 12 });
-          
-          // Magnetic Pull Effect: translate button slightly toward cursor (max 6px)
-          const deltaX = e.clientX - (rect.left + rect.width / 2);
-          const deltaY = e.clientY - (rect.top + rect.height / 2);
-          const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-          const maxPull = 6;
-          
-          let xOffset = 0;
-          let yOffset = 0;
-          
-          if (distance > 0) {
-            xOffset = (deltaX / distance) * Math.min(distance * 0.15, maxPull);
-            yOffset = (deltaY / distance) * Math.min(distance * 0.15, maxPull);
-          }
-          
-          hoverable.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
-          hoverable.style.transition = 'transform 0.08s ease-out';
-        } else {
-          setCursorType('hover');
-        }
       } else {
-        setCursorType('default');
-        
-        // Reset any magnetic buttons in scope
-        const magneticElements = document.querySelectorAll('.magnetic-btn, button');
-        magneticElements.forEach(el => {
-          el.style.transform = '';
-          el.style.transition = 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
-        });
+        setIsVisible(false);
       }
     };
 
-    const handleMouseLeave = () => {
-      // Clean up magnetic styles if mouse leaves window
-      const magneticElements = document.querySelectorAll('.magnetic-btn, button');
-      magneticElements.forEach(el => {
-        el.style.transform = '';
-      });
-    };
-
     window.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseleave', handleMouseLeave);
     
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseleave', handleMouseLeave);
-      document.body.style.cursor = '';
     };
   }, []);
 
-  if (!isEnabled) return null;
+  if (!isVisible) return null;
 
   return (
     <div 
@@ -91,8 +43,7 @@ export default function CustomCursor() {
       className={`${styles.cursor} ${styles[cursorType]}`}
       style={{ 
         left: `${position.x}px`, 
-        top: `${position.y}px`,
-        ...(cursorType === 'pill' ? { width: `${pillSize.width}px`, height: `${pillSize.height}px` } : {})
+        top: `${position.y}px`
       }}
     >
       {cursorType === 'crosshair' && (
