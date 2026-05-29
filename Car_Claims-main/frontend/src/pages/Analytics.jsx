@@ -5,8 +5,13 @@ import {
   BarChart3, 
   Activity 
 } from 'lucide-react';
+import { translations } from '../utils/translations.js';
 
-function Analytics({ claims, filterOptions, metrics }) {
+function Analytics({ claims, filterOptions, metrics, currentLanguage }) {
+  const t = (key) => {
+    return translations[currentLanguage]?.[key] || translations['English']?.[key] || key;
+  };
+
   const [topCount, setTopCount] = useState(5);
 
   // Compute make densities dynamically
@@ -32,12 +37,12 @@ function Analytics({ claims, filterOptions, metrics }) {
   return (
     <div className="page-fade-in tile-section tile-light" style={{ minHeight: 'calc(100vh - 96px)', paddingTop: '60px', paddingBottom: '80px' }}>
       <div className="analytics-header" style={{ maxWidth: '1100px', width: '100%', textAlign: 'center', marginBottom: '16px' }}>
-        <span className="tagline-accent">System Intelligence Hub</span>
+        <span className="tagline-accent">{t('systemIntelligenceHub')}</span>
         <h2 className="hero-display-title" style={{ textAlign: 'center', marginBottom: '16px' }}>
-          Actuarial Risk & Audits
+          {t('actuarialRiskTitle')}
         </h2>
         <p className="hero-lead-text" style={{ fontSize: '18px', textAlign: 'center', marginBottom: '40px', color: 'var(--colors-body-muted)' }}>
-          Detailed diagnostics analyzing vehicle manufacturers, statistical correlations, and claims payouts.
+          {t('actuarialRiskDesc')}
         </p>
       </div>
 
@@ -50,7 +55,7 @@ function Analytics({ claims, filterOptions, metrics }) {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
               <span className="chart-card-title" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '16px', fontWeight: '700' }}>
                 <BarChart3 className="w-5 h-5" style={{ color: 'var(--colors-primary)' }} />
-                Claims Density by Vehicle Manufacturer
+                {t('claimsDensity')}
               </span>
               
               <select 
@@ -58,9 +63,9 @@ function Analytics({ claims, filterOptions, metrics }) {
                 onChange={(e) => setTopCount(Number(e.target.value))}
                 style={{ padding: '6px 12px', border: '1px solid var(--colors-hairline)', borderRadius: 'var(--rounded-pill)', fontSize: '13px', backgroundColor: 'var(--colors-canvas)', outline: 'none', cursor: 'pointer' }}
               >
-                <option value={5}>Top 5 Makes</option>
-                <option value={10}>Top 10 Makes</option>
-                <option value={20}>Top 20 Makes</option>
+                <option value={5}>{t('topMakes')} 5</option>
+                <option value={10}>{t('topMakes')} 10</option>
+                <option value={20}>{t('topMakes')} 20</option>
               </select>
             </div>
             
@@ -72,7 +77,7 @@ function Analytics({ claims, filterOptions, metrics }) {
                   <div key={make} className="density-row">
                      <div className="density-label-line" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px', fontSize: '14px' }}>
                       <span style={{ textTransform: 'capitalize', fontWeight: '600' }}>{make.toLowerCase()}</span>
-                      <span style={{ color: 'var(--colors-body-muted)', fontSize: '13px' }}>{count} claims ({pct}%)</span>
+                      <span style={{ color: 'var(--colors-body-muted)', fontSize: '13px' }}>{count} {t('claims').toLowerCase()} ({pct}%)</span>
                     </div>
                     <div className="density-bar-track" style={{ height: '8px', backgroundColor: 'rgba(0,0,0,0.06)', borderRadius: '9999px', overflow: 'hidden' }}>
                       <div 
@@ -97,17 +102,17 @@ function Analytics({ claims, filterOptions, metrics }) {
             <div>
               <span className="chart-card-title" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '16px', fontWeight: '700', marginBottom: '8px' }}>
                 <TrendingUp className="w-5 h-5" style={{ color: '#ef4444' }} />
-                Actuarial Risk Correlation Index
+                {t('actuarialRiskIndex')}
               </span>
               <p className="chart-subtitle" style={{ color: 'var(--colors-body-muted)', fontSize: '13px', lineHeight: '1.4', marginBottom: '24px' }}>
-                Correlates real-time visual assessment datasets against common claim fraud flags.
+                {t('correlatesDataset')}
               </p>
             </div>
             
             <div className="indicator-grid-metrics" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px' }}>
               <div className="indicator-box" style={{ padding: '20px', backgroundColor: 'var(--colors-canvas)', borderRadius: 'var(--rounded-sm)', border: '1px solid var(--colors-hairline)', textAlign: 'left' }}>
                 <span className="caption" style={{ color: 'var(--colors-body-muted)', fontSize: '11px', fontWeight: '600', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>
-                  Unwitnessed Incidents
+                  {t('unwitnessedIncidents')}
                 </span>
                 <div className="indicator-val" style={{ fontSize: '28px', fontWeight: '700', color: unwitnessedPct > 50 ? '#ef4444' : 'var(--colors-ink)' }}>
                   {unwitnessedPct}%
@@ -119,7 +124,7 @@ function Analytics({ claims, filterOptions, metrics }) {
 
               <div className="indicator-box" style={{ padding: '20px', backgroundColor: 'var(--colors-canvas)', borderRadius: 'var(--rounded-sm)', border: '1px solid var(--colors-hairline)', textAlign: 'left' }}>
                 <span className="caption" style={{ color: 'var(--colors-body-muted)', fontSize: '11px', fontWeight: '600', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>
-                  Police Report Absent
+                  {t('policeReportAbsent')}
                 </span>
                 <div className="indicator-val" style={{ fontSize: '28px', fontWeight: '700', color: policeAbsentPct > 50 ? '#ef4444' : 'var(--colors-ink)' }}>
                   {policeAbsentPct}%
@@ -131,15 +136,16 @@ function Analytics({ claims, filterOptions, metrics }) {
 
               <div className="indicator-box" style={{ padding: '20px', backgroundColor: 'var(--colors-canvas)', borderRadius: 'var(--rounded-sm)', border: '1px solid var(--colors-hairline)', textAlign: 'left' }}>
                 <span className="caption" style={{ color: 'var(--colors-body-muted)', fontSize: '11px', fontWeight: '600', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>
-                  Severe Claims (&gt; $15K)
+                  {t('severeClaims')}
                 </span>
                 <div className="indicator-val" style={{ fontSize: '28px', fontWeight: '700', color: 'var(--colors-primary)' }}>
                   {highPayoutPct}%
                 </div>
                 <span className="indicator-sub" style={{ fontSize: '12px', color: 'var(--colors-body-muted)', display: 'block', marginTop: '4px' }}>
-                  Net capital exposure indicator
+                  {t('netCapitalExposure')}
                 </span>
               </div>
+
             </div>
           </div>
         </div>
@@ -149,9 +155,11 @@ function Analytics({ claims, filterOptions, metrics }) {
           <div style={{ display: 'flex', gap: '16px', backgroundColor: 'rgba(239, 68, 68, 0.06)', border: '1px solid rgba(239, 68, 68, 0.15)', padding: '24px', borderRadius: 'var(--rounded-md)', marginTop: '8px', textAlign: 'left' }}>
             <AlertTriangle className="w-8 h-8" style={{ color: '#ef4444', flexShrink: 0 }} />
             <div>
-              <h4 style={{ fontSize: '15px', fontWeight: '700', color: '#ef4444', marginBottom: '4px' }}>Attention: High Underwriting Fraud Rate Detected</h4>
+              <h4 style={{ fontSize: '15px', fontWeight: '700', color: '#ef4444', marginBottom: '4px' }}>{t('highFraudRateDetected')}</h4>
               <p style={{ fontSize: '13px', color: 'rgba(0,0,0,0.6)', lineHeight: '1.4' }}>
-                The active filtered cohort has flagged a fraudulent claim rate of <strong>{metrics.fraud_rate_pct}%</strong> (representing {metrics.fraud_count} instances). This is above the industry baseline of 8.5% and warrants closer auditing of unwitnessed claims and missing police files.
+                {t('cohortDescription')
+                  .replace('{fraud_rate}', metrics.fraud_rate_pct)
+                  .replace('{fraud_count}', metrics.fraud_count)}
               </p>
             </div>
           </div>
@@ -160,17 +168,17 @@ function Analytics({ claims, filterOptions, metrics }) {
         {/* Detailed audit table: Top severe claim files */}
         <div style={{ backgroundColor: 'var(--colors-canvas)', borderRadius: 'var(--rounded-md)', border: '1px solid var(--colors-hairline)', padding: '24px', boxShadow: 'var(--shadow-premium)', textAlign: 'left' }}>
           <span style={{ fontSize: '15px', fontWeight: '700', display: 'block', marginBottom: '16px' }}>
-            Top 5 Severe Active Claims in Current Cohort
+            {t('topSevereActiveClaims')}
           </span>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--colors-divider-soft)', color: 'var(--colors-body-muted)', textAlign: 'left' }}>
-                  <th style={{ padding: '12px 16px' }}>Policy #</th>
-                  <th>Make</th>
-                  <th>Damage Class</th>
-                  <th>Visual Impact</th>
-                  <th style={{ textAlign: 'right', paddingRight: '16px' }}>Payout Est.</th>
+                  <th style={{ padding: '12px 16px' }}>{t('policyNumShort')}</th>
+                  <th>{t('make')}</th>
+                  <th>{t('damageType')}</th>
+                  <th>{t('cvDamagePct')}</th>
+                  <th style={{ textAlign: 'right', paddingRight: '16px' }}>{t('payoutLiability')}</th>
                 </tr>
               </thead>
               <tbody>

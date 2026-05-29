@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import heroCar from '../assets/hero_sports_car.png';
 import visualAiHud from '../assets/visual_ai_hud.png';
+import { translations } from '../utils/translations.js';
 
 function ClaimsLedger({ 
   filterOptions,
@@ -20,8 +21,13 @@ function ClaimsLedger({
   setSelectedFraud,
   claims,
   metrics,
-  onResetFilters
+  onResetFilters,
+  currentLanguage
 }) {
+  const t = (key) => {
+    return translations[currentLanguage]?.[key] || translations['English']?.[key] || key;
+  };
+
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
@@ -62,12 +68,12 @@ function ClaimsLedger({
   return (
     <div className="page-fade-in tile-section tile-parchment" style={{ minHeight: 'calc(100vh - 96px)', paddingTop: '60px', paddingBottom: '80px', backgroundColor: '#fcfcfd' }}>
       <div className="ledger-header" style={{ maxWidth: '1100px', width: '100%', textAlign: 'center', marginBottom: '16px' }}>
-        <span className="tagline-accent">Audit Operations Center</span>
+        <span className="tagline-accent">{t('adminScope')}</span>
         <h2 className="hero-display-title" style={{ textAlign: 'center', marginBottom: '16px', color: '#111111' }}>
-          Claims Operations Registry
+          {t('claimsRegistryTitle')}
         </h2>
         <p className="hero-lead-text" style={{ fontSize: '18px', textAlign: 'center', marginBottom: '40px', color: 'var(--colors-body-muted)' }}>
-          Real-time claims auditing ledger powered by unified database queries.
+          {t('claimsRegistryDesc')}
         </p>
       </div>
 
@@ -79,7 +85,7 @@ function ClaimsLedger({
           <Search className="w-5 h-5" style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'var(--colors-body-muted)' }} />
           <input 
             type="text" 
-            placeholder="Search active registry by Policy #, Make (e.g. Mazda, Honda), or Damage Type..."
+            placeholder={t('searchPlaceholder')}
             value={searchQuery}
             onChange={(e) => {
               setSearchQuery(e.target.value);
@@ -93,7 +99,7 @@ function ClaimsLedger({
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '32px', borderTop: '1px solid #f4f4f5', paddingTop: '20px' }}>
           {/* Year Selector */}
           <div className="filter-group">
-            <span className="filter-group-label">Claim Year</span>
+            <span className="filter-group-label">{t('claimYear')}</span>
             <div className="filter-button-cluster">
               {filterOptions.years.map(y => (
                 <button
@@ -110,19 +116,23 @@ function ClaimsLedger({
 
           {/* Fraud Status */}
           <div className="filter-group">
-            <span className="filter-group-label">Fraud Classification</span>
+            <span className="filter-group-label">{t('fraudClassification')}</span>
             <div className="filter-button-cluster">
-              {["All", "Fraudulent Only", "Legitimate Only"].map(status => (
+              {[
+                { key: "All", label: t('all') },
+                { key: "Fraudulent Only", label: t('fraudulentOnly') },
+                { key: "Legitimate Only", label: t('legitimateOnly') }
+              ].map(status => (
                 <button
-                  key={status}
+                  key={status.key}
                   onClick={() => {
-                    setSelectedFraud(status);
+                    setSelectedFraud(status.key);
                     setCurrentPage(1);
                   }}
-                  className={`chip-filter-btn ${selectedFraud === status ? 'active-blue' : ''}`}
+                  className={`chip-filter-btn ${selectedFraud === status.key ? 'active-blue' : ''}`}
                   style={{ borderRadius: '6px' }}
                 >
-                  {status}
+                  {status.label}
                 </button>
               ))}
             </div>
@@ -139,7 +149,7 @@ function ClaimsLedger({
               className="chip-filter-btn"
               style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 16px', borderRadius: '6px' }}
             >
-              <RotateCcw className="w-3.5 h-3.5" /> Reset Filters
+              <RotateCcw className="w-3.5 h-3.5" /> {t('resetFilters')}
             </button>
           </div>
         </div>
@@ -150,55 +160,55 @@ function ClaimsLedger({
         {/* Card 1: Total Claims */}
         <div className="museum-kpi-card" style={{ backgroundColor: '#ffffff', border: '1px solid #e4e4e7', boxShadow: 'none', borderRadius: '12px' }}>
           <div>
-            <span className="kpi-card-header">Total claims in ledger</span>
+            <span className="kpi-card-header">{t('totalClaimsLedger')}</span>
             <h3 className="kpi-card-value" style={{ color: '#18181b' }}>{metrics.total_claims.toLocaleString()}</h3>
           </div>
-          <div className="kpi-card-footer">Audited Active Registry</div>
+          <div className="kpi-card-footer">{t('auditedActive')}</div>
         </div>
 
         {/* Card 2: Fraud Rate */}
         <div className={`museum-kpi-card ${metrics.fraud_rate_pct > 10 ? 'alert-kpi' : ''}`} style={{ backgroundColor: '#ffffff', border: '1px solid #e4e4e7', boxShadow: 'none', borderRadius: '12px' }}>
           <div>
-            <span className="kpi-card-header">Identified Fraud Rate</span>
+            <span className="kpi-card-header">{t('identifiedFraudRate')}</span>
             <h3 className={`kpi-card-value ${metrics.fraud_rate_pct > 10 ? 'red' : ''}`}>
               {metrics.fraud_rate_pct}%
             </h3>
           </div>
           <div className="kpi-card-footer">
-            {metrics.fraud_count} Flags raised in filters
+            {metrics.fraud_count} {t('flagsRaised')}
           </div>
         </div>
 
         {/* Card 3: Aggregate Payout */}
         <div className="museum-kpi-card" style={{ backgroundColor: '#ffffff', border: '1px solid #e4e4e7', boxShadow: 'none', borderRadius: '12px' }}>
           <div>
-            <span className="kpi-card-header">Net Payout Exposure</span>
+            <span className="kpi-card-header">{t('netPayout')}</span>
             <h3 className="kpi-card-value" style={{ color: '#18181b' }}>${(metrics.total_payout / 1000000).toFixed(2)}M</h3>
           </div>
           <div className="kpi-card-footer">
-            Avg: ${Math.round(metrics.avg_payout).toLocaleString()} per claim
+            Avg: ${Math.round(metrics.avg_payout).toLocaleString()}
           </div>
         </div>
 
         {/* Card 4: Avg Damage % */}
         <div className="museum-kpi-card" style={{ backgroundColor: '#ffffff', border: '1px solid #e4e4e7', boxShadow: 'none', borderRadius: '12px' }}>
           <div>
-            <span className="kpi-card-header">Mean collision impact</span>
+            <span className="kpi-card-header">{t('meanCollision')}</span>
             <h3 className="kpi-card-value blue">{metrics.avg_damage_pct}%</h3>
           </div>
-          <div className="kpi-card-footer">Quantified by OpenCV HUD</div>
+          <div className="kpi-card-footer">{t('quantifiedOpenCV')}</div>
         </div>
       </div>
 
       {/* Raw Claims Ledger Table panel with evidence column */}
       <div className="table-panel-shell" style={{ width: '100%', maxWidth: '1100px', marginTop: '32px', backgroundColor: '#ffffff', border: '1px solid #e4e4e7', borderRadius: '12px', boxShadow: 'none' }}>
         <div className="table-panel-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <span className="table-title" style={{ color: '#18181b' }}>Active Claims Registry Queue</span>
+          <span className="table-title" style={{ color: '#18181b' }}>{t('activeClaimsRegistryQueue')}</span>
           <span className="table-counter-meta">
             {totalItems > 0 ? (
-              <>Showing {startIndex + 1}-{Math.min(startIndex + itemsPerPage, totalItems)} of {totalItems} filtered claims</>
+              <>{t('showingClaims')} {startIndex + 1}-{Math.min(startIndex + itemsPerPage, totalItems)} of {totalItems}</>
             ) : (
-              <>No matching claims found</>
+              <>{t('noMatchingClaims')}</>
             )}
           </span>
         </div>
@@ -207,13 +217,13 @@ function ClaimsLedger({
           <table className="claims-data-grid">
             <thead>
               <tr style={{ color: 'var(--colors-body-muted)' }}>
-                <th style={{ paddingLeft: '32px' }}>Evidence</th>
-                <th>Policy #</th>
-                <th>Make</th>
-                <th>Damage Type</th>
-                <th style={{ textAlign: 'right' }}>CV Damage %</th>
-                <th style={{ textAlign: 'right' }}>Payout Liability</th>
-                <th style={{ textAlign: 'center', paddingRight: '32px' }}>Fraud Status</th>
+                <th style={{ paddingLeft: '32px' }}>{t('evidence')}</th>
+                <th>{t('policyNumShort')}</th>
+                <th>{t('make')}</th>
+                <th>{t('damageType')}</th>
+                <th style={{ textAlign: 'right' }}>{t('cvDamagePct')}</th>
+                <th style={{ textAlign: 'right' }}>{t('payoutLiability')}</th>
+                <th style={{ textAlign: 'center', paddingRight: '32px' }}>{t('fraudStatus')}</th>
               </tr>
             </thead>
             <tbody>
@@ -236,7 +246,7 @@ function ClaimsLedger({
                     </td>
                     <td style={{ textAlign: 'center', paddingRight: '32px' }}>
                       <span className={`badge-claim ${claim.FraudFound === 'Yes' ? 'red' : 'green'}`}>
-                        {claim.FraudFound === 'Yes' ? 'Flagged' : 'Passed'}
+                        {claim.FraudFound === 'Yes' ? t('fraudulentOnly') : t('legitimateOnly')}
                       </span>
                     </td>
                   </tr>
@@ -244,7 +254,7 @@ function ClaimsLedger({
               ) : (
                 <tr>
                   <td colSpan="7" style={{ textAlign: 'center', padding: '48px', color: 'var(--colors-body-muted)' }}>
-                    No claims match your search query or filter options.
+                    {t('noMatchingClaims')}
                   </td>
                 </tr>
               )}
@@ -265,7 +275,7 @@ function ClaimsLedger({
                 className="btn btn-secondary"
                 style={{ padding: '6px 12px', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '4px', opacity: currentPage === 1 ? 0.4 : 1, cursor: currentPage === 1 ? 'not-allowed' : 'pointer', border: '1px solid #e4e4e7', borderRadius: '6px' }}
               >
-                <ChevronLeft className="w-4 h-4" /> Previous
+                <ChevronLeft className="w-4 h-4" /> {t('previous')}
               </button>
               <button 
                 onClick={handleNextPage} 
@@ -273,7 +283,7 @@ function ClaimsLedger({
                 className="btn btn-secondary"
                 style={{ padding: '6px 12px', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '4px', opacity: currentPage === totalPages ? 0.4 : 1, cursor: currentPage === totalPages ? 'not-allowed' : 'pointer', border: '1px solid #e4e4e7', borderRadius: '6px' }}
               >
-                Next <ChevronRight className="w-4 h-4" />
+                {t('next')} <ChevronRight className="w-4 h-4" />
               </button>
             </div>
           </div>

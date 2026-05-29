@@ -1,0 +1,147 @@
+/* src/components/ProblemStats.module.css */
+.statsSection {
+  background-color: var(--bg-void);
+  padding: var(--section-py-desktop) 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .statsSection {
+    padding: var(--section-py-mobile) 24px;
+  }
+}
+
+.container {
+  max-width: var(--max-content-width);
+  margin: 0 auto;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sub {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--cyan);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.title {
+  font-family: var(--font-heading);
+  font-size: 46px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+  margin-bottom: 14px;
+}
+
+@media (max-width: 600px) {
+  .title {
+    font-size: 30px;
+  }
+}
+
+.subtext {
+  font-family: var(--font-heading);
+  font-size: 16px;
+  color: var(--text-secondary);
+  max-width: 520px;
+  line-height: 1.6;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--column-gutter);
+}
+
+@media (max-width: 991px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+.statCard {
+  background: var(--grad-card);
+  border: 1px solid var(--bg-border);
+  border-radius: var(--card-radius);
+  padding: 40px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+/* Subtle Semantic Left Edge Accents */
+.cyanEdge { border-left: 2px solid var(--cyan); }
+.greenEdge { border-left: 2px solid var(--green); }
+.amberEdge { border-left: 2px solid var(--amber); }
+
+.statCard:hover {
+  border-color: rgba(0, 212, 255, 0.25);
+  transform: translateY(-6px) scale(1.005);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 30px rgba(0, 212, 255, 0.06);
+}
+
+/* Number Weight Shifting on Card Hover */
+.statCard:hover .number {
+  font-weight: 600;
+  text-shadow: 0 0 10px rgba(238, 242, 247, 0.1);
+}
+
+.badge {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--cyan);
+  background: var(--cyan-dim);
+  border: 1px solid rgba(0, 212, 255, 0.15);
+  border-radius: 4px;
+  padding: 3px 8px;
+  letter-spacing: 0.08em;
+  margin-bottom: 24px;
+}
+
+.numberRow {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 12px;
+}
+
+.number {
+  font-family: var(--font-body);
+  font-size: 52px;
+  line-height: 1;
+  font-weight: 500;
+  color: var(--text-primary);
+  transition: font-weight 0.2s ease, text-shadow 0.2s ease;
+  font-variant-numeric: tabular-nums;
+}
+
+.label {
+  font-family: var(--font-heading);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+.description {
+  font-family: var(--font-heading);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}

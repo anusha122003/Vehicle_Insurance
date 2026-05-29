@@ -1,0 +1,14 @@
+/* src/components/ScrollProgressBar.module.css */
+.progressBar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--cyan), var(--amber));
+  z-index: 9999;
+  transform-origin: left;
+  box-shadow: 0 0 8px rgba(0, 212, 255, 0.5);
+  transition: transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}

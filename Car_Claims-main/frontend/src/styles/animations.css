@@ -1,0 +1,86 @@
+/* src/styles/animations.css */
+
+/* Float animation for cards and widgets */
+@keyframes floatY {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+/* Scan line sweep */
+@keyframes scanLine {
+  0% { top: -2px; opacity: 0; }
+  10% { opacity: 0.8; }
+  90% { opacity: 0.8; }
+  100% { top: 100%; opacity: 0; }
+}
+
+/* Marquee scrolling */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Opposite Marquee scrolling */
+@keyframes marqueeReverse {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
+/* Fade up with slight lift */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Draw line (stroke-dashoffset) */
+@keyframes drawLine {
+  from { stroke-dashoffset: 100%; }
+  to { stroke-dashoffset: 0; }
+}
+
+/* Blinking typewriter cursor */
+@keyframes cursorBlink {
+  0%, 49% { border-color: transparent; }
+  50%, 100% { border-color: var(--cyan); }
+}
+
+/* Floating background Orbs */
+@keyframes orb-float-a {
+  0%, 100% { transform: translate(0px, 0px); }
+  33%       { transform: translate(30px, -20px); }
+  66%       { transform: translate(-20px, 15px); }
+}
+
+@keyframes orb-float-b {
+  0%, 100% { transform: translate(0px, 0px); }
+  50%       { transform: translate(-25px, 35px); }
+}
+
+@keyframes orb-float-c {
+  0%, 100% { transform: translate(0px, 0px); }
+  40%       { transform: translate(15px, -30px); }
+}
+
+/* Rotating conic border layout property simulation */
+@keyframes border-rotate {
+  100% {
+    --angle: 360deg;
+  }
+}
+
+/* Pulse keyframes for scanner bounding boxes */
+@keyframes scannerPulse {
+  0%, 100% { transform: scale(1); opacity: 0.9; }
+  50% { transform: scale(0.96); opacity: 0.7; }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

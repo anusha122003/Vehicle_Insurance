@@ -6,8 +6,13 @@ import {
   Activity, 
   Camera 
 } from 'lucide-react';
+import { translations } from '../utils/translations.js';
 
-function Assessor() {
+function Assessor({ currentLanguage }) {
+  const t = (key) => {
+    return translations[currentLanguage]?.[key] || translations['English']?.[key] || key;
+  };
+
   // Localized CV Assessor State
   const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -96,12 +101,12 @@ function Assessor() {
   return (
     <div className="page-fade-in tile-section tile-dark" style={{ minHeight: 'calc(100vh - 96px)', paddingTop: '60px', paddingBottom: '80px' }}>
       <div className="assessor-page-header-wrap" style={{ maxWidth: '1100px', width: '100%', textAlign: 'center', marginBottom: '16px' }}>
-        <span className="tagline-accent tagline-accent-dark">Collision Visual Intelligence</span>
+        <span className="tagline-accent tagline-accent-dark">{t('visualEngine')}</span>
         <h2 className="hero-display-title hero-display-title-dark" style={{ fontSize: '42px', textAlign: 'center', marginBottom: '16px' }}>
-          Real-Time Neural Damage Assessor
+          {t('neuralAssessorTitle')}
         </h2>
         <p className="hero-lead-text" style={{ fontSize: '18px', textAlign: 'center', color: 'var(--colors-body-muted)', margin: '0 auto 40px', maxWidth: '800px' }}>
-          Upload a collision photograph to evaluate vehicle damage, identify the category, calculate physical surface percentages, and estimate claim liability.
+          {t('neuralAssessorDesc')}
         </p>
       </div>
 
@@ -114,7 +119,7 @@ function Assessor() {
           onDragLeave={handleDrag}
           onDrop={handleDrop}
         >
-          <span className="assessor-pane-header">Claim Assessment Control</span>
+          <span className="assessor-pane-header">{t('claimControl')}</span>
           
           <div className="upload-core-container">
             {imagePreview ? (
@@ -134,9 +139,9 @@ function Assessor() {
               >
                 <Upload className="w-10 h-10" style={{ color: 'var(--colors-body-muted)', marginBottom: '12px' }} />
                 <span className="body-strong" style={{ color: '#ffffff', fontWeight: '600' }}>
-                  {dragActive ? 'Drop image here' : 'Drop claim image here or click to select'}
+                  {dragActive ? t('dragDrop') : t('dropClaimImage')}
                 </span>
-                <span className="caption" style={{ color: 'var(--colors-body-muted)', marginTop: '4px', fontSize: '12px' }}>Supports PNG, JPG, or JPEG</span>
+                <span className="caption" style={{ color: 'var(--colors-body-muted)', marginTop: '4px', fontSize: '12px' }}>{t('supportsFiles')}</span>
               </div>
             )}
             <input 
@@ -155,7 +160,7 @@ function Assessor() {
               <div style={{ flex: 1 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                   <label className="caption" style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.8rem', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                    Vehicle Value: ${assessorPrice.toLocaleString()}
+                    {t('vehicleValue')}: ${assessorPrice.toLocaleString()}
                   </label>
                 </div>
                 <input 
@@ -177,7 +182,7 @@ function Assessor() {
               <div style={{ flex: 1 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                   <label className="caption" style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.8rem', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                    Policy Deductible: ${assessorDeductible.toLocaleString()}
+                    {t('policyDeductible')}: ${assessorDeductible.toLocaleString()}
                   </label>
                 </div>
                 <input 
@@ -205,7 +210,7 @@ function Assessor() {
               className="btn btn-primary"
               style={{ backgroundColor: 'var(--colors-primary-on-dark)', flex: 1, justifyContent: 'center' }}
             >
-              Select Image
+              {t('selectImage')}
             </button>
             {selectedImage && (
               <button 
@@ -213,7 +218,7 @@ function Assessor() {
                 className="btn btn-primary"
                 style={{ backgroundColor: '#10b981', color: '#ffffff', flex: 1, justifyContent: 'center' }}
               >
-                Recalculate Payout
+                {t('recalculatePayout')}
               </button>
             )}
             {imagePreview && (
@@ -222,7 +227,7 @@ function Assessor() {
                 className="btn btn-secondary btn-secondary-dark"
                 style={{ padding: '12px 20px' }}
               >
-                Clear
+                {t('clear')}
               </button>
             )}
           </div>
@@ -231,7 +236,7 @@ function Assessor() {
         {/* AI Result HUD Zone */}
         <div className="assessor-results-pane">
           <div className="assessor-header-row">
-            <span className="assessor-pane-header">AI HUD Diagnostics</span>
+            <span className="assessor-pane-header">{t('aiHudDiagnostics')}</span>
             {assessmentResult && (
               <span className={`severity-pill ${
                 assessmentResult.severity === 'Total Loss' || assessmentResult.severity === 'Severe'
@@ -246,14 +251,14 @@ function Assessor() {
           {assessmentResult ? (
             <div className="results-details">
               <div>
-                <span className="result-label">Identified Damage Class</span>
+                <span className="result-label">{t('identifiedDamageClass')}</span>
                 <div className="result-value-main" style={{ textTransform: 'capitalize' }}>
                   {assessmentResult.damage_type.replace('_', ' ')}
                 </div>
               </div>
 
               <div>
-                <span className="result-label">Geometric Damage Area</span>
+                <span className="result-label">{t('geometricDamageArea')}</span>
                 <div className="result-percentage-row">
                   <div className="result-pct-text">{assessmentResult.damage_pct}%</div>
                   <div className="progress-track">
@@ -269,25 +274,25 @@ function Assessor() {
 
               <div style={{ marginTop: '8px', borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '20px' }}>
                 <span className="result-label" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <DollarSign className="w-4 h-4" style={{ color: '#10b981' }} /> Estimated Payout Liability
+                  <DollarSign className="w-4 h-4" style={{ color: '#10b981' }} /> {t('estimatedPayoutLiability')}
                 </span>
                 <div className="result-value-main" style={{ color: '#10b981', fontSize: '2.2rem', fontWeight: '700', marginTop: '4px' }}>
                   ${assessmentResult.estimated_payout !== undefined ? Math.round(assessmentResult.estimated_payout).toLocaleString() : '0'}
                 </div>
                 <span className="caption" style={{ color: 'rgba(255,255,255,0.4)', fontSize: '12px', marginTop: '6px', display: 'block', lineHeight: '1.4' }}>
-                  Formula: max(0, ({assessmentResult.damage_pct}% &times; ${Math.round(assessmentResult.vehicle_price || assessorPrice).toLocaleString()}) - ${assessmentResult.deductible || assessorDeductible})
+                  {t('coverageFormula')}: max(0, ({assessmentResult.damage_pct}% &times; ${Math.round(assessmentResult.vehicle_price || assessorPrice).toLocaleString()}) - ${assessmentResult.deductible || assessorDeductible})
                 </span>
               </div>
 
               <div className="assessor-meta-grid">
                 <div>
-                  <span className="result-label">CV Status</span>
+                  <span className="result-label">{t('cvStatus')}</span>
                   <div className="caption-strong" style={{ color: '#4ade80', display: 'flex', alignItems: 'center', gap: '6px', marginTop: '4px', fontSize: '13px', fontWeight: '600' }}>
-                    <CheckCircle className="w-4 h-4" /> Assessment Saved
+                    <CheckCircle className="w-4 h-4" /> {t('assessmentSaved')}
                   </div>
                 </div>
                 <div>
-                  <span className="result-label">File Output</span>
+                  <span className="result-label">{t('fileOutput')}</span>
                   <div className="caption" style={{ color: '#ffffff', marginTop: '4px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontSize: '12px' }}>
                     {assessmentResult.annotated_path.split('/').pop().split('\\').pop()}
                   </div>
@@ -297,9 +302,9 @@ function Assessor() {
           ) : (
             <div className="assessor-empty-state">
               <Activity className="w-12 h-12" style={{ color: 'rgba(255,255,255,0.15)', marginBottom: '16px' }} />
-              <span className="body-strong" style={{ color: 'var(--colors-body-muted)', fontWeight: '600' }}>Awaiting visual feed</span>
+              <span className="body-strong" style={{ color: 'var(--colors-body-muted)', fontWeight: '600' }}>{t('awaitingVisualFeed')}</span>
               <p className="caption" style={{ color: 'rgba(255, 255, 255, 0.4)', marginTop: '6px', maxWidth: '280px', fontSize: '13px', lineHeight: '1.4' }}>
-                Upload a vehicle photograph on the left to start real-time damage analysis. You can also drag and drop your photo directly.
+                {t('awaitingVisualFeedDesc')}
               </p>
             </div>
           )}
@@ -313,7 +318,7 @@ function Assessor() {
 
       {assessmentResult && assessmentResult.annotated_b64 && (
         <div className="contour-overlay-box">
-          <span className="caption" style={{ color: 'rgba(255,255,255,0.4)', display: 'block', marginBottom: '12px', fontFamily: 'monospace', fontSize: '12px' }}>Real-Time OpenCV Contour overlay framework</span>
+          <span className="caption" style={{ color: 'rgba(255,255,255,0.4)', display: 'block', marginBottom: '12px', fontFamily: 'monospace', fontSize: '12px' }}>{t('opencvContourOverlay')}</span>
           <img 
             src={`data:image/png;base64,${assessmentResult.annotated_b64}`} 
             alt="Annotated Damage HUD" 

@@ -16,7 +16,12 @@ import {
 import visualAiHud from '../assets/visual_ai_hud.png';
 import heroCar from '../assets/hero_sports_car.png';
 
-function DashboardOverview({ onNavigate }) {
+import { translations } from '../utils/translations.js';
+
+function DashboardOverview({ onNavigate, currentLanguage }) {
+  const t = (key) => {
+    return translations[currentLanguage]?.[key] || translations['English']?.[key] || key;
+  };
   const [scanning, setScanning] = useState(false);
 
   const handleReScan = () => {
@@ -90,7 +95,7 @@ function DashboardOverview({ onNavigate }) {
             System Online: Visual Engine v4.2
           </span>
           <h1 style={{ fontSize: '32px', fontWeight: '700', letterSpacing: '-0.03em', color: '#111111', marginTop: '8px', marginBottom: '4px' }}>
-            AI Damage Assessment Dashboard
+            {t('techScope')} / {t('adminScope')}
           </h1>
           <p style={{ fontSize: '14px', color: 'var(--colors-body-muted)', margin: 0 }}>
             Real-time fraud detection and visual claim orchestration.
@@ -125,7 +130,7 @@ function DashboardOverview({ onNavigate }) {
         <div style={{ backgroundColor: '#ffffff', border: '1px solid #e4e4e7', borderRadius: '12px', padding: '24px', textAlign: 'left', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', boxShadow: 'none' }}>
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: 'var(--colors-body-muted)', marginBottom: '12px' }}>
-              <span style={{ fontSize: '12px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Active Claims</span>
+              <span style={{ fontSize: '12px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{t('myClaims')}</span>
               <TrendingUp className="w-4 h-4" style={{ color: '#0066cc' }} />
             </div>
             <h3 style={{ fontSize: '32px', fontWeight: '700', color: '#18181b', margin: 0, letterSpacing: '-0.02em' }}>1,284</h3>
@@ -139,7 +144,7 @@ function DashboardOverview({ onNavigate }) {
         <div style={{ backgroundColor: '#ffffff', border: '1px solid #e4e4e7', borderRadius: '12px', padding: '24px', textAlign: 'left', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', boxShadow: 'none' }}>
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: 'var(--colors-body-muted)', marginBottom: '12px' }}>
-              <span style={{ fontSize: '12px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Avg. Severity</span>
+              <span style={{ fontSize: '12px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{t('severity')}</span>
               <AlertTriangle className="w-4 h-4" style={{ color: '#f59e0b' }} />
             </div>
             <h3 style={{ fontSize: '32px', fontWeight: '700', color: '#18181b', margin: 0, letterSpacing: '-0.02em' }}>Med-High</h3>
@@ -153,7 +158,7 @@ function DashboardOverview({ onNavigate }) {
         <div style={{ backgroundColor: '#ffffff', border: '1px solid #e4e4e7', borderRadius: '12px', padding: '24px', textAlign: 'left', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', boxShadow: 'none' }}>
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: 'var(--colors-body-muted)', marginBottom: '12px' }}>
-              <span style={{ fontSize: '12px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.05em' }}>AI Confidence</span>
+              <span style={{ fontSize: '12px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.05em' }}>AI {t('severity')}</span>
               <CheckCircle className="w-4 h-4" style={{ color: '#10b981' }} />
             </div>
             <h3 style={{ fontSize: '32px', fontWeight: '700', color: '#18181b', margin: 0, letterSpacing: '-0.02em' }}>98.2%</h3>
@@ -167,7 +172,7 @@ function DashboardOverview({ onNavigate }) {
         <div style={{ backgroundColor: '#ffffff', border: '1px solid #e4e4e7', borderRadius: '12px', padding: '24px', textAlign: 'left', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', boxShadow: 'none' }}>
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: 'var(--colors-body-muted)', marginBottom: '12px' }}>
-              <span style={{ fontSize: '12px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Fraud Alerts</span>
+              <span style={{ fontSize: '12px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{t('fraudRate')}</span>
               <ShieldAlert className="w-4 h-4" style={{ color: '#ef4444' }} />
             </div>
             <h3 style={{ fontSize: '32px', fontWeight: '700', color: '#18181b', margin: 0, letterSpacing: '-0.02em' }}>24</h3>
