@@ -7,17 +7,17 @@
   height: 72px;
   z-index: 1000;
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  background: transparent;
-  border-bottom: 1px solid transparent;
+  background: #FFFFFF;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.06);
   padding: 0 24px;
 }
 
 .scrolled {
-  background: rgba(5, 7, 10, 0.8);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border-bottom: 1px solid var(--bg-border);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+  background: rgba(255, 255, 255, 0.92) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
   height: 64px;
 }
 
@@ -38,44 +38,17 @@
   user-select: none;
 }
 
-.logoIcon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(0, 212, 255, 0.02));
-  border: 1px solid rgba(0, 212, 255, 0.25);
-  transition: all 0.3s ease;
-}
-
-.logo:hover .logoIcon {
-  border-color: var(--cyan);
-  box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
-  transform: translateY(-1px);
-}
-
-.shieldIcon {
-  color: var(--cyan);
-  filter: drop-shadow(0 0 4px rgba(0, 212, 255, 0.4));
-}
-
 .logoText {
   font-family: var(--font-display);
-  font-size: 16px;
-  font-weight: 800;
-  letter-spacing: 0.05em;
-  color: var(--text-primary);
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: #0A0E1A;
 }
 
 .logoCyan {
-  color: var(--cyan);
-}
-
-.logoDot {
-  color: var(--cyan);
-  animation: cursorBlink 1.2s infinite;
+  font-weight: 700;
+  color: #00B8D9;
 }
 
 .navigation {
@@ -91,7 +64,7 @@
 }
 
 .navLink {
-  color: var(--text-secondary);
+  color: #4B5563;
   font-family: var(--font-heading);
   font-size: 13.5px;
   font-weight: 500;
@@ -108,15 +81,15 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: 1px;
-  background-color: var(--cyan);
+  height: 2px;
+  background-color: #00B8D9;
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .navLink:hover {
-  color: var(--text-primary);
+  color: #0A0E1A;
 }
 
 .navLink:hover::after {
@@ -141,8 +114,8 @@
 }
 
 .langToggle {
-  background: rgba(30, 39, 51, 0.2);
-  border: 1px solid var(--bg-border);
+  background: var(--bg-panel);
+  border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: var(--chip-radius);
   height: 34px;
   padding: 0 12px;
@@ -158,8 +131,8 @@
 }
 
 .langToggle:hover {
-  background: rgba(30, 39, 51, 0.4);
-  border-color: rgba(0, 212, 255, 0.3);
+  background: var(--bg-panel);
+  border-color: rgba(0, 184, 217, 0.3);
 }
 
 .langCode {
@@ -187,16 +160,15 @@
   position: absolute;
   top: calc(100% + 8px);
   right: 0;
-  background: rgba(8, 12, 16, 0.95);
-  backdrop-filter: blur(16px);
-  border: 1px solid var(--bg-border);
+  background: var(--bg-secondary);
+  border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 8px;
   padding: 6px;
   min-width: 120px;
   display: flex;
   flex-direction: column;
   gap: 2px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  box-shadow: var(--shadow-card-hover);
   z-index: 1001;
   animation: dropdownFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
@@ -220,13 +192,13 @@
 }
 
 .langOption:hover {
-  background: rgba(0, 212, 255, 0.08);
-  color: var(--cyan);
+  background: var(--cyan-light);
+  color: var(--text-cyan);
 }
 
 .langOptionActive {
-  background: rgba(0, 212, 255, 0.12);
-  color: var(--cyan);
+  background: var(--cyan-medium);
+  color: var(--text-cyan);
   font-weight: 600;
 }
 
@@ -237,7 +209,7 @@
   font-family: var(--font-heading);
   font-size: 13.5px;
   font-weight: 500;
-  color: var(--text-secondary);
+  color: #4B5563;
   cursor: pointer;
   transition: color 0.2s ease;
   height: 38px;
@@ -245,7 +217,7 @@
 }
 
 .signInButton:hover {
-  color: var(--text-primary);
+  color: #0A0E1A;
 }
 
 @media (max-width: 868px) {
@@ -256,15 +228,15 @@
 
 .ctaButton {
   position: relative;
-  background: var(--cyan);
-  border: 1px solid var(--cyan);
+  background: #00B8D9;
+  border: 1px solid #00B8D9;
   border-radius: var(--chip-radius);
   height: 38px;
   padding: 0 18px;
   cursor: pointer;
   overflow: hidden;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 4px 15px rgba(0, 212, 255, 0.15);
+  box-shadow: 0 2px 8px rgba(0, 184, 217, 0.25);
 }
 
 .ctaBtnInner {
@@ -272,7 +244,7 @@
   font-family: var(--font-heading);
   font-size: 13px;
   font-weight: 700;
-  color: var(--bg-void);
+  color: #FFFFFF;
   z-index: 2;
   letter-spacing: 0.02em;
 }
@@ -280,7 +252,7 @@
 .ctaBtnGlow {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, #00D4FF, #008ebf);
+  background: linear-gradient(135deg, #00B8D9, #0099BA);
   opacity: 0;
   z-index: 1;
   transition: opacity 0.3s ease;
@@ -288,7 +260,9 @@
 
 .ctaButton:hover {
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(0, 212, 255, 0.35);
+  box-shadow: 0 4px 20px rgba(0, 184, 217, 0.40);
+  background: #0099BA;
+  border-color: #0099BA;
 }
 
 .ctaButton:hover .ctaBtnGlow {
@@ -351,10 +325,8 @@
   width: 320px;
   max-width: 85vw;
   height: 100%;
-  background: rgba(6, 8, 12, 0.96);
-  backdrop-filter: blur(32px);
-  -webkit-backdrop-filter: blur(32px);
-  border-left: 1px solid var(--bg-border);
+  background: #FFFFFF;
+  border-left: 1px solid rgba(0,0,0,0.08);
   padding: 30px;
   display: flex;
   flex-direction: column;
@@ -365,7 +337,7 @@
 
 .drawerOpen {
   transform: translateX(0);
-  box-shadow: -15px 0 40px rgba(0, 0, 0, 0.8);
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.05);
 }
 
 .drawerHeader {
@@ -455,8 +427,8 @@
 }
 
 .drawerLangBtn {
-  background: rgba(30, 39, 51, 0.25);
-  border: 1px solid var(--bg-border);
+  background: var(--bg-panel);
+  border: 1px solid rgba(0, 0, 0, 0.06);
   border-radius: 6px;
   color: var(--text-secondary);
   height: 36px;
@@ -468,15 +440,15 @@
 }
 
 .drawerLangBtn:hover {
-  background: rgba(30, 39, 51, 0.5);
-  border-color: rgba(0, 212, 255, 0.2);
+  background: var(--bg-secondary);
+  border-color: rgba(0, 184, 217, 0.2);
   color: var(--text-primary);
 }
 
 .drawerLangActive {
-  background: rgba(0, 212, 255, 0.1);
+  background: var(--cyan-light);
   border-color: var(--cyan);
-  color: var(--cyan);
+  color: var(--text-cyan);
 }
 
 .drawerSignInBtn {
@@ -494,8 +466,8 @@
 
 .drawerSignInBtn:hover {
   color: var(--text-primary);
-  border-color: rgba(255, 255, 255, 0.2);
-  background: rgba(255, 255, 255, 0.02);
+  border-color: rgba(0, 0, 0, 0.15);
+  background: var(--bg-panel);
 }
 
 .drawerCtaBtn {
@@ -515,4 +487,73 @@
 .drawerCtaBtn:hover {
   box-shadow: 0 6px 20px rgba(0, 212, 255, 0.35);
   transform: translateY(-1px);
+}
+
+/* v2.0 Status Pill Styles */
+.statusPill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #F0FDF4;
+  border: 1px solid rgba(5, 150, 105, 0.2);
+  border-radius: 99px;
+  padding: 4px 12px;
+  height: 28px;
+}
+
+@media (max-width: 868px) {
+  .statusPill {
+    display: none;
+  }
+}
+
+.statusDot {
+  width: 8px;
+  height: 8px;
+  background-color: #059669;
+  border-radius: 50%;
+  animation: pulseGreenGlow 2s infinite ease-in-out;
+}
+
+@keyframes pulseGreenGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(5, 150, 105, 0.2); }
+  50% { box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15); }
+}
+
+.statusText {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 500;
+  color: #059669;
+  text-transform: none;
+  letter-spacing: 0.05em;
+}
+
+.drawerStatusPill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #F0FDF4;
+  border: 1px solid rgba(5, 150, 105, 0.2);
+  border-radius: 99px;
+  padding: 6px 16px;
+  align-self: flex-start;
+  margin-bottom: 8px;
+}
+
+.drawerStatusPill .statusDot {
+  width: 8px;
+  height: 8px;
+  background-color: #059669;
+  border-radius: 50%;
+  animation: pulseGreenGlow 2s infinite ease-in-out;
+}
+
+.drawerStatusPill .statusText {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 500;
+  color: #059669;
+  text-transform: none;
+  letter-spacing: 0.05em;
 }

@@ -3,6 +3,42 @@ import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import styles from './ProblemStats.module.css';
 
+function CountdownMinutes() {
+  const [val, setVal] = useState(5.0);
+  const [suffix, setSuffix] = useState("");
+  const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.2 });
+
+  useEffect(() => {
+    if (inView) {
+      let start = 5.0;
+      const end = 0.5;
+      const stepTime = 40; // ms
+      const steps = 30; // total steps
+      const dec = (start - end) / steps;
+      
+      const timer = setInterval(() => {
+        start -= dec;
+        if (start <= end) {
+          clearInterval(timer);
+          setVal(0.5);
+          setSuffix(" Min");
+        } else {
+          setVal(parseFloat(start.toFixed(1)));
+        }
+      }, stepTime);
+
+      return () => clearInterval(timer);
+    }
+  }, [inView]);
+
+  return (
+    <span ref={ref} className={styles.number}>
+      {val}
+      <span className={styles.suffix}>{suffix}</span>
+    </span>
+  );
+}
+
 function CountUpNumber({ target, suffix = "", duration = 1.5 }) {
   const [currentVal, setCurrentVal] = useState(0);
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.2 });
@@ -38,7 +74,7 @@ function CountUpNumber({ target, suffix = "", duration = 1.5 }) {
   return (
     <span ref={ref} className={styles.number}>
       {currentVal}
-      {suffix}
+      <span className={styles.suffix}>{suffix}</span>
     </span>
   );
 }
@@ -46,36 +82,38 @@ function CountUpNumber({ target, suffix = "", duration = 1.5 }) {
 export default function ProblemStats() {
   const stats = [
     {
-      target: "7.0",
-      suffix: "m",
-      label: "Average Settlement",
-      description: "Claims are analyzed, verified, and approved autonomously in minutes rather than weeks.",
-      tag: "SPEED",
+      type: "countdown",
+      label: "Minutes to settlement",
+      description: "Down from 5–10 business days",
       colorClass: "cyanEdge"
     },
     {
+      type: "countup",
       target: "98.8",
       suffix: "%",
-      label: "Visual Accuracy",
-      description: "Surgical computer vision classification isolates exterior damage down to the millimeter.",
-      tag: "PRECISION",
+      label: "Damage detection accuracy",
+      description: "Verified across 10,000+ claim images",
       colorClass: "greenEdge"
     },
     {
-      target: "24x7",
-      suffix: "",
-      label: "Telemetry Auditing",
-      description: "Continuous real-time anomaly checks on vehicle claims feeds to capture policy fraud instantly.",
-      tag: "AVAILABILITY",
+      type: "countup",
+      target: "40",
+      suffix: "%",
+      label: "Fraud caught early",
+      description: "Before human review, every time",
       colorClass: "amberEdge"
     }
   ];
 
   return (
-    <section className={styles.statsSection}>
+    <section className={styles.statsSection} id="stats">
       <div className={styles.container}>
         <div className={styles.header}>
-          <span className={styles.sub}>[ PLATFORM PERFORMANCE ]</span>
+          <span className={styles.sub}>
+            <span className={styles.subBrackets}>[</span>
+            <span className={styles.subText}>PLATFORM PERFORMANCE</span>
+            <span className={styles.subBrackets}>]</span>
+          </span>
           <h2 className={styles.title}>Engineered for Absolute Certainty.</h2>
           <p className={styles.subtext}>Every claim. Every time. Measured, not estimated.</p>
         </div>
@@ -85,16 +123,15 @@ export default function ProblemStats() {
             <motion.div 
               key={index} 
               className={`${styles.statCard} ${styles[stat.colorClass]}`}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-10%" }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: index * 0.1 }}
+              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: index * 0.1 }}
               data-hover="true"
             >
-              <div className={styles.badge}>{stat.tag}</div>
               <div className={styles.numberRow}>
-                {stat.target === "24x7" ? (
-                  <span className={styles.number}>24x7</span>
+                {stat.type === "countdown" ? (
+                  <CountdownMinutes />
                 ) : (
                   <CountUpNumber target={stat.target} suffix={stat.suffix} />
                 )}

@@ -14,37 +14,38 @@
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background: rgba(17, 25, 33, 0.85);
+  background: var(--bg-secondary);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--bg-border);
+  border: 1px solid rgba(0, 0, 0, 0.08);
   color: var(--cyan);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 16px rgba(0, 212, 255, 0.15);
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: var(--shadow-card), 0 0 12px rgba(0, 184, 217, 0.1);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
 }
 
 .fab:hover {
-  border-color: rgba(0, 212, 255, 0.5);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 24px rgba(0, 212, 255, 0.3);
+  border-color: rgba(0, 184, 217, 0.35);
+  box-shadow: var(--shadow-card-hover), 0 0 20px rgba(0, 184, 217, 0.15);
+  transform: translateY(-2px);
 }
 
 .chatWindow {
   width: 340px;
   height: 480px;
-  background: rgba(11, 16, 22, 0.9);
+  background: var(--bg-secondary);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--bg-border);
+  border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 16px;
   margin-bottom: 20px;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(0, 212, 255, 0.05);
+  box-shadow: var(--shadow-card-hover);
 }
 
 .chatHeader {
@@ -52,8 +53,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid var(--bg-border);
-  background: rgba(17, 25, 33, 0.5);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  background: var(--bg-panel);
 }
 
 .headerTitle {
@@ -62,7 +63,7 @@
   gap: 8px;
   font-family: var(--font-mono);
   font-size: 13px;
-  color: var(--cyan);
+  color: var(--text-cyan);
   font-weight: 500;
   letter-spacing: 0.05em;
 }
@@ -95,7 +96,7 @@
 
 .closeButton:hover {
   color: var(--text-primary);
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(0, 0, 0, 0.04);
 }
 
 .messagesContainer {
@@ -115,7 +116,7 @@
   background: transparent;
 }
 .messagesContainer::-webkit-scrollbar-thumb {
-  background: var(--bg-border-hi);
+  background: rgba(0, 0, 0, 0.1);
   border-radius: 4px;
 }
 
@@ -137,12 +138,12 @@
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background: rgba(0, 212, 255, 0.1);
-  border: 1px solid rgba(0, 212, 255, 0.3);
+  background: var(--cyan-light);
+  border: 1px solid rgba(0, 184, 217, 0.25);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--cyan);
+  color: var(--text-cyan);
   flex-shrink: 0;
 }
 
@@ -156,33 +157,33 @@
 }
 
 .bubbleBot {
-  background: var(--bg-surface);
+  background: var(--bg-panel);
   color: var(--text-secondary);
-  border: 1px solid var(--bg-border);
+  border: 1px solid rgba(0, 0, 0, 0.06);
   border-bottom-left-radius: 4px;
   font-family: var(--font-mono); /* Technical feel for bot */
   font-size: 12px;
 }
 
 .bubbleUser {
-  background: rgba(0, 212, 255, 0.1);
+  background: var(--cyan-light);
   color: var(--text-primary);
-  border: 1px solid rgba(0, 212, 255, 0.2);
+  border: 1px solid rgba(0, 184, 217, 0.2);
   border-bottom-right-radius: 4px;
 }
 
 .inputArea {
   padding: 16px;
-  border-top: 1px solid var(--bg-border);
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
   display: flex;
   gap: 8px;
-  background: rgba(8, 12, 16, 0.95);
+  background: var(--bg-panel);
 }
 
 .textInput {
   flex: 1;
-  background: var(--bg-surface);
-  border: 1px solid var(--bg-border);
+  background: var(--bg-secondary);
+  border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 8px;
   padding: 10px 14px;
   color: var(--text-primary);
@@ -193,8 +194,8 @@
 }
 
 .textInput:focus {
-  border-color: rgba(0, 212, 255, 0.5);
-  box-shadow: 0 0 0 2px rgba(0, 212, 255, 0.1);
+  border-color: rgba(0, 184, 217, 0.4);
+  box-shadow: 0 0 0 2px rgba(0, 184, 217, 0.08);
 }
 
 .textInput::placeholder {
@@ -204,10 +205,10 @@
 .sendButton {
   width: 40px;
   height: 40px;
-  background: rgba(0, 212, 255, 0.1);
-  border: 1px solid rgba(0, 212, 255, 0.2);
+  background: var(--cyan-light);
+  border: 1px solid rgba(0, 184, 217, 0.2);
   border-radius: 8px;
-  color: var(--cyan);
+  color: var(--text-cyan);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -217,8 +218,8 @@
 }
 
 .sendButton:hover:not(:disabled) {
-  background: rgba(0, 212, 255, 0.2);
-  border-color: rgba(0, 212, 255, 0.4);
+  background: var(--cyan-medium);
+  border-color: rgba(0, 184, 217, 0.4);
 }
 
 .sendButton:disabled {
@@ -237,3 +238,4 @@
     height: 400px;
   }
 }
+

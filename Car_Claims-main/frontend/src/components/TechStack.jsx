@@ -1,107 +1,70 @@
 import { motion } from 'framer-motion';
 import styles from './TechStack.module.css';
-
+ 
 export default function TechStack() {
-  const aiLayer = [
-    { name: "YOLOv8", sub: "DAMAGE DETECT" },
-    { name: "EfficientNet-B0", sub: "SEVERITY CLASS." },
-    { name: "XGBoost", sub: "FRAUD MODEL" },
-    { name: "Llama-3", sub: "EXPLANATIONS" }
-  ];
-
-  const infraLayer = [
-    { name: "FastAPI", sub: "API LAYER" },
-    { name: "React 19", sub: "UI PIPELINE" },
-    { name: "Snowflake", sub: "DATA CLOUD" },
-    { name: "Scikit-learn", sub: "ML UTILITIES" }
-  ];
-
-  const containerVariants = {
-    hidden: {},
-    visible: {
-      transition: {
-        staggerChildren: 0.06
-      }
+  const bands = [
+    {
+      layer: "PERCEPTION LAYER",
+      desc: "Multi-modal computer vision engines instantly isolate damage exterior anomalies from standard smartphone images.",
+      color: "cyan"
+    },
+    {
+      layer: "RISK LAYER",
+      desc: "Cross-checks situational parameters, metadata, and claim histories to flag predictive fraud exposure indicators.",
+      color: "green"
+    },
+    {
+      layer: "INTELLIGENCE LAYER",
+      desc: "Generative synthesis engines compile visual findings and risk markers into auditable, natural language claim summaries.",
+      color: "amber"
+    },
+    {
+      layer: "INFRASTRUCTURE LAYER",
+      desc: "High-throughput processing pipelines handle requests under secure SOC 2 Type II enterprise guidelines.",
+      color: "grey"
     }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, scale: 0.9 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: {
-        duration: 0.4,
-        ease: 'easeOut'
-      }
-    }
-  };
-
+  ];
+ 
   return (
     <section id="tech-stack" className={styles.section}>
       <div className={styles.container}>
         <div className={styles.header}>
-          <span className={styles.sub}>[ SYSTEM ARCHITECTURE ]</span>
-          <h2 className={styles.title}>The Integration Stack.</h2>
+          <span className={styles.sub}>
+            <span className={styles.subBrackets}>[</span>
+            <span className={styles.subText}>PLATFORM ARCHITECTURE</span>
+            <span className={styles.subBrackets}>]</span>
+          </span>
+          <h2 className={styles.title}>
+            Built for Scale. Engineered for Trust<span className={styles.cyanPeriod}>.</span>
+          </h2>
           <p className={styles.description}>
-            Powered by pure-code diagnostic tools and lightning-fast data frameworks. Zero heavy image dependencies.
+            Four unified operational layers built on secure, capability-based software architectures.
           </p>
         </div>
-
-        {/* Panel Box containing PCB texture grid detail */}
+ 
         <div className={styles.panelBox}>
+          {/* Faint grid background detail */}
           <div className={styles.pcbGrid} />
-
-          {/* AI Layer */}
-          <div className={styles.layerGroup}>
-            <span className={styles.layerLabel}>AI LAYER</span>
-            <motion.div 
-              className={styles.techGrid}
-              variants={containerVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-10%" }}
-            >
-              {aiLayer.map((tech, index) => (
-                <motion.div 
-                  key={index} 
-                  className={`${styles.techCard} ${styles.aiCard}`}
-                  variants={itemVariants}
-                  data-hover="true"
-                >
-                  <span className={styles.name}>
-                    <span className={styles.activeDot}>●</span>{tech.name}
-                  </span>
-                  <span className={styles.category}>{tech.sub}</span>
-                </motion.div>
-              ))}
-            </motion.div>
+ 
+          <div className={styles.bandsContainer}>
+            {bands.map((band, idx) => (
+              <motion.div 
+                key={idx}
+                className={`${styles.bandCard} ${styles[band.color]}`}
+                initial={{ opacity: 0, x: -24 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: "-10%" }}
+                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: idx * 0.08 }}
+              >
+                <div className={styles.bandLeftIndicator} />
+                <div className={styles.bandContent}>
+                  <span className={styles.bandLayerLabel}>{band.layer}</span>
+                  <p className={styles.bandDesc}>{band.desc}</p>
+                </div>
+              </motion.div>
+            ))}
           </div>
-
-          {/* Infrastructure Layer */}
-          <div className={styles.layerGroup} style={{ marginTop: '40px' }}>
-            <span className={styles.layerLabel}>INFRASTRUCTURE</span>
-            <motion.div 
-              className={styles.techGrid}
-              variants={containerVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-10%" }}
-            >
-              {infraLayer.map((tech, index) => (
-                <motion.div 
-                  key={index} 
-                  className={styles.techCard}
-                  variants={itemVariants}
-                  data-hover="true"
-                >
-                  <span className={styles.name}>{tech.name}</span>
-                  <span className={styles.category}>{tech.sub}</span>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-
+ 
         </div>
       </div>
     </section>

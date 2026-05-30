@@ -1,34 +1,56 @@
+@property --angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
 /* src/styles/variables.css */
 :root {
   /* === BASE SURFACES === */
-  --bg-void:          #05070A;   /* Deepest black — page base */
-  --bg-primary:       #080C10;   /* Primary canvas */
-  --bg-secondary:     #0C1218;   /* Cards, sections */
-  --bg-surface:       #111921;   /* Elevated panels */
-  --bg-surface-hi:    #161F28;   /* Hovered/active states */
-  --bg-border:        #1A2530;   /* Default borders */
-  --bg-border-hi:     #243040;   /* Hovered borders */
+  --bg-void:          #F8F9FB;   /* Off-white canvas, slightly cool */
+  --bg-primary:       #F8F9FB;   /* Primary canvas */
+  --bg-secondary:     #FFFFFF;   /* Pure white cards */
+  --bg-surface:       #FFFFFF;   /* Elevated panels */
+  --bg-surface-hi:    #FFFFFF;
+  --bg-panel:         #F1F5F9;   /* For inner lightbox dashboards */
+  
+  --bg-border:        rgba(0,0,0,0.08);   /* Hairline default borders */
+  --bg-border-hi:     rgba(0,184,217,0.35); /* Cyan tint on hover */
+  --bg-border-strong: rgba(0,0,0,0.15);
 
   /* === BRAND ACCENT === */
-  --cyan:             #00D4FF;   /* Primary brand cyan */
-  --cyan-dim:         rgba(0, 212, 255, 0.08);
-  --cyan-glow-sm:     rgba(0, 212, 255, 0.15);
-  --cyan-glow-md:     rgba(0, 212, 255, 0.25);
-  --cyan-glow-lg:     rgba(0, 212, 255, 0.06); /* Wide ambient */
+  --cyan:             #00B8D9;   /* Primary brand cyan (light deep) */
+  --cyan-light:       rgba(0,184,217,0.08);
+  --cyan-medium:      rgba(0,184,217,0.15);
+  --cyan-dim:         rgba(0,184,217,0.03);
+  --cyan-glow-sm:     rgba(0, 184, 217, 0.15);
+  --cyan-glow-md:     rgba(0, 184, 217, 0.25);
+  --cyan-glow-lg:     rgba(0, 184, 217, 0.06);
 
   /* === SEMANTIC COLORS === */
-  --amber:            #F59E0B;   /* Fraud risk / warning */
-  --amber-dim:        rgba(245, 158, 11, 0.08);
-  --green:            #10B981;   /* Approved / safe */
-  --green-dim:        rgba(16, 185, 129, 0.08);
-  --red:              #EF4444;   /* High risk */
-  --red-dim:          rgba(239, 68, 68, 0.08);
+  --green:            #059669;   /* Daylight success green */
+  --green-light:      rgba(5,150,105,0.08);
+  --green-dim:        rgba(5,150,105,0.04);
+  --amber:            #D97706;   /* Warning amber */
+  --amber-light:      rgba(217,119,6,0.08);
+  --amber-dim:        rgba(217,119,6,0.04);
+  --red:              #DC2626;   /* Severe red */
+  --red-light:        rgba(220,38,38,0.08);
+  --red-dim:          rgba(220,38,38,0.04);
 
   /* === TYPOGRAPHY === */
-  --text-primary:     #EEF2F7;   /* Headlines */
-  --text-secondary:   #6B7E92;   /* Body text */
-  --text-muted:       #344555;   /* Disabled/placeholder */
-  --text-link:        #00D4FF;   /* Interactive text */
+  --text-primary:     #0A0E1A;   /* Headings, near-black navy */
+  --text-secondary:   #4B5563;   /* Body text, cool mid-grey */
+  --text-muted:       #9CA3AF;   /* Captions, labels, placeholders */
+  --text-cyan:        #0090B0;   /* Slightly deeper text cyan */
+  --text-link:        #0090B0;
+  --text-on-cyan:     #FFFFFF;
+
+  /* === SHADOWS === */
+  --shadow-card:       0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.06);
+  --shadow-card-hover: 0 4px 8px rgba(0,0,0,0.08), 0 12px 32px rgba(0,0,0,0.10);
+  --shadow-btn:        0 2px 8px rgba(0,184,217,0.25);
+  --shadow-btn-hover:  0 4px 20px rgba(0,184,217,0.40);
 
   /* === GRADIENTS === */
   --grad-hero:        radial-gradient(ellipse 70% 60% at 50% -5%, rgba(0, 212, 255, 0.12) 0%, rgba(0, 212, 255, 0.03) 40%, transparent 70%);
@@ -40,6 +62,7 @@
   --font-display:     'Bricolage Grotesque', 'DM Sans', system-ui, sans-serif;
   --font-heading:     'DM Sans', sans-serif;
   --font-body:        'DM Mono', monospace;
+  --font-serif:       'Instrument Serif', serif;
 
   /* === Spacing & Layout === */
   --max-content-width: 1200px;

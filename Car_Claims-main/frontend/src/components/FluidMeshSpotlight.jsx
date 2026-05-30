@@ -157,18 +157,18 @@ export default function FluidMeshSpotlight() {
         const t     = Math.min(1, disp / (LENS_R * 0.6)); // 0 = calm, 1 = full lens
 
         // ── Fill & Stroke: mild rainbow tint, invisible at rest, whisper‑soft under lens ────────
-        const fillA = 0.02 + t * 0.10;
-        const strokeA = 0.08 + t * 0.30;  // base 0.08 → max 0.38
+        const fillA = 0.06 + t * 0.14;
+        const strokeA = 0.18 + t * 0.35;  // base 0.18 → max 0.53
         const strokeW = 0.6 + t * 1.2;   // base 0.6px → max 1.8px
         const hue = 190 + ((h.bx + h.by) * 0.05) % 30; // Misty Sea subtle blue range
 
         // Fill
         drawHexFlat(ctx, drawX, drawY, drawR);
-        ctx.fillStyle = `hsla(${hue}, 45%, 78%, ${fillA})`;
+        ctx.fillStyle = `hsla(${hue}, 40%, 62%, ${fillA})`;
         ctx.fill();
 
         // Stroke
-        ctx.strokeStyle = `hsla(${hue}, 45%, 72%, ${strokeA})`;
+        ctx.strokeStyle = `hsla(${hue}, 40%, 55%, ${strokeA})`;
         ctx.lineWidth = strokeW;
         ctx.stroke();
 

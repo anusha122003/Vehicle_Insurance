@@ -19,8 +19,8 @@ import FloatingChatbot from '../components/FloatingChatbot.jsx';
 export default function LandingPage({ onOpenAuth, currentLanguage, onChangeLanguage }) {
   return (
     <motion.div 
-      initial={{ backgroundColor: '#000000' }}
-      animate={{ backgroundColor: '#05070A' }} // var(--bg-void)
+      initial={{ backgroundColor: '#FFFFFF' }}
+      animate={{ backgroundColor: '#F8F9FB' }} // var(--bg-void)
       transition={{ duration: 0.4, delay: 0.05 }}
       style={{ minHeight: '100vh', color: 'var(--text-primary)', overflowX: 'hidden' }}
     >
@@ -33,8 +33,6 @@ export default function LandingPage({ onOpenAuth, currentLanguage, onChangeLangu
       {/* 1. Frosted Pill Glassmorphic Header */}
       <Navbar 
         onOpenAuth={onOpenAuth} 
-        currentLanguage={currentLanguage} 
-        onChangeLanguage={onChangeLanguage} 
       />
 
       {/* 2. Hero Section: Display typography & damage scanner */}

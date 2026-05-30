@@ -84,8 +84,8 @@
 
 body {
   font-family: var(--font-sans);
-  background-color: var(--colors-canvas-parchment);
-  color: var(--colors-ink);
+  background-color: #F8F9FB;
+  color: #0A0E1A;
   font-size: 16px;
   line-height: 1.5;
   letter-spacing: -0.022em;

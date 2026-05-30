@@ -1,6 +1,6 @@
 /* src/components/Testimonials.module.css */
 .section {
-  background-color: var(--bg-void);
+  background-color: transparent;
   padding: var(--section-py-desktop) 24px;
   position: relative;
   overflow: hidden;
@@ -34,10 +34,19 @@
   margin-bottom: 12px;
 }
 
+.subBrackets {
+  color: rgba(0, 0, 0, 0.2);
+  font-weight: 700;
+}
+
+.subText {
+  color: var(--text-cyan);
+}
+
 .title {
   font-family: var(--font-heading);
   font-size: 46px;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.03em;
   color: var(--text-primary);
 }
@@ -62,50 +71,90 @@
 }
 
 .card {
-  background: rgba(12, 18, 24, 0.4) !important;
+  background: var(--bg-secondary) !important;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--bg-border);
-  border-left: 2px solid var(--cyan) !important;
+  border: 1px solid transparent;
   border-radius: var(--card-radius);
   padding: 32px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-card);
 }
 
+.cyanCard { border-left: 3px solid rgba(0, 184, 217, 0.3) !important; }
+.greenCard { border-left: 3px solid rgba(5, 150, 105, 0.3) !important; }
+.amberCard { border-left: 3px solid rgba(217, 119, 6, 0.3) !important; }
+
 .card:hover {
-  border-color: rgba(0, 212, 255, 0.3);
-  border-left-color: var(--cyan);
-  transform: translateY(-4px);
-  box-shadow: 0 10px 40px rgba(0, 212, 255, 0.04);
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-card-hover);
+}
+
+.cyanCard:hover {
+  border-left-color: var(--cyan) !important;
+  box-shadow: var(--shadow-card-hover), 0 0 25px rgba(0, 184, 217, 0.05) !important;
+  border-color: rgba(0, 184, 217, 0.2);
+}
+
+.greenCard:hover {
+  border-left-color: var(--green) !important;
+  box-shadow: var(--shadow-card-hover), 0 0 25px rgba(5, 150, 105, 0.05) !important;
+  border-color: rgba(5, 150, 105, 0.2);
+}
+
+.amberCard:hover {
+  border-left-color: var(--amber) !important;
+  box-shadow: var(--shadow-card-hover), 0 0 25px rgba(217, 119, 6, 0.05) !important;
+  border-color: rgba(217, 119, 6, 0.2);
 }
 
 .stars {
   font-family: var(--font-body);
   font-size: 14px;
-  color: var(--cyan);
+  color: #F59E0B;
   margin-bottom: 18px;
-  letter-spacing: 0.2em;
+  letter-spacing: 2px;
 }
 
 .quote {
   font-family: var(--font-heading);
   font-size: 15px;
-  line-height: 1.75;
+  line-height: 1.8;
   color: var(--text-secondary);
   margin: 0 0 24px 0;
-  font-style: italic;
   text-align: left;
+  font-style: normal;
+  font-weight: 400;
 }
 
 .authorMeta {
   display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--cyan-light);
+  color: var(--text-cyan);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(0, 184, 217, 0.25);
+}
+
+.metaText {
+  display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 4px;
 }
 
 .authorName {
@@ -117,11 +166,14 @@
 
 .authorRole {
   font-family: var(--font-heading);
-  font-size: 12.5px;
+  font-size: 12px;
   color: var(--text-muted);
 }
 
 .company {
-  color: var(--text-secondary);
-  font-weight: 500;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 0.05em;
 }

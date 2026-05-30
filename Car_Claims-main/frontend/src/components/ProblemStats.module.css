@@ -1,6 +1,6 @@
 /* src/components/ProblemStats.module.css */
 .statsSection {
-  background-color: var(--bg-void);
+  background-color: transparent;
   padding: var(--section-py-desktop) 24px;
   position: relative;
   overflow: hidden;
@@ -36,10 +36,19 @@
   margin-bottom: 16px;
 }
 
+.subBrackets {
+  color: #3D4F60;
+  font-weight: 700;
+}
+
+.subText {
+  color: var(--cyan);
+}
+
 .title {
   font-family: var(--font-heading);
   font-size: 46px;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.03em;
   color: var(--text-primary);
   margin-bottom: 14px;
@@ -73,54 +82,65 @@
 }
 
 .statCard {
-  background: rgba(12, 18, 24, 0.4) !important;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--bg-border);
+  background: #FFFFFF !important;
+  border: none !important;
   border-radius: var(--card-radius);
   padding: 40px 32px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-card);
   position: relative;
 }
 
 /* Subtle Semantic Left Edge Accents */
-.cyanEdge { border-left: 2px solid var(--cyan); }
-.greenEdge { border-left: 2px solid var(--green); }
-.amberEdge { border-left: 2px solid var(--amber); }
+.cyanEdge { border-left: 3px solid #00B8D9 !important; }
+.greenEdge { border-left: 3px solid #059669 !important; }
+.amberEdge { border-left: 3px solid #D97706 !important; }
 
 .statCard:hover {
-  border-color: rgba(0, 212, 255, 0.25);
-  transform: translateY(-6px) scale(1.005);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 30px rgba(0, 212, 255, 0.06);
+  transform: translateY(-4px);
+  background: rgba(0, 184, 217, 0.03) !important;
+  box-shadow: var(--shadow-card-hover);
 }
 
-/* Number Weight Shifting on Card Hover */
-.statCard:hover .number {
-  font-weight: 600;
-  text-shadow: 0 0 10px rgba(238, 242, 247, 0.1);
+.statCard:hover.cyanEdge {
+  border-left-width: 5px !important;
+  border-left-color: #00B8D9 !important;
 }
 
-.badge {
-  font-family: var(--font-body);
-  font-size: 10px;
-  font-weight: 600;
-  color: var(--cyan);
-  background: var(--cyan-dim);
-  border: 1px solid rgba(0, 212, 255, 0.15);
-  border-radius: 4px;
-  padding: 3px 8px;
-  letter-spacing: 0.08em;
-  margin-bottom: 24px;
+.statCard:hover.greenEdge {
+  border-left-width: 5px !important;
+  border-left-color: #059669 !important;
+}
+
+.statCard:hover.amberEdge {
+  border-left-width: 5px !important;
+  border-left-color: #D97706 !important;
+}
+
+/* Number transitions from primary text to matching accent color on hover */
+.statCard:hover.cyanEdge .number {
+  color: #00B8D9;
+  text-shadow: 0 0 20px rgba(0, 184, 217, 0.15);
+}
+
+.statCard:hover.greenEdge .number {
+  color: #059669;
+  text-shadow: 0 0 20px rgba(5, 150, 105, 0.15);
+}
+
+.statCard:hover.amberEdge .number {
+  color: #D97706;
+  text-shadow: 0 0 20px rgba(217, 119, 6, 0.15);
 }
 
 .numberRow {
   display: flex;
   align-items: baseline;
   margin-bottom: 12px;
+  height: 52px;
 }
 
 .number {
@@ -129,8 +149,17 @@
   line-height: 1;
   font-weight: 500;
   color: var(--text-primary);
-  transition: font-weight 0.2s ease, text-shadow 0.2s ease;
+  transition: color 0.30s ease, text-shadow 0.30s ease;
   font-variant-numeric: tabular-nums;
+  display: inline-flex;
+  align-items: baseline;
+}
+
+.suffix {
+  font-size: 24px;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-left: 4px;
 }
 
 .label {
@@ -138,12 +167,12 @@
   font-size: 16px;
   font-weight: 600;
   color: var(--text-primary);
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 
 .description {
   font-family: var(--font-heading);
-  font-size: 15px;
-  line-height: 1.75;
-  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-muted);
 }

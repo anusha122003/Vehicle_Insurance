@@ -1,31 +1,17 @@
 import { useState, useEffect } from 'react';
-import { Shield, Menu, X, ChevronDown } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import styles from './Navbar.module.css';
 import { motion } from 'framer-motion';
 
-const LANGS = ['English', 'Hindi', 'Kannada', 'Tamil'];
-const LANG_CODES = { English: 'EN', Hindi: 'HI', Kannada: 'KN', Tamil: 'TM' };
-
-export default function Navbar({ onOpenAuth, currentLanguage, onChangeLanguage }) {
+export default function Navbar({ onOpenAuth }) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [langOpen, setLangOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 40);
+    const handleScroll = () => setScrolled(window.scrollY > 60);
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  // Close lang dropdown when clicking outside
-  useEffect(() => {
-    if (!langOpen) return;
-    const close = (e) => {
-      if (!e.target.closest('[data-lang-dropdown]')) setLangOpen(false);
-    };
-    document.addEventListener('mousedown', close);
-    return () => document.removeEventListener('mousedown', close);
-  }, [langOpen]);
 
   // Lock body scroll when drawer is open
   useEffect(() => {
@@ -33,39 +19,31 @@ export default function Navbar({ onOpenAuth, currentLanguage, onChangeLanguage }
     return () => { document.body.style.overflow = ''; };
   }, [menuOpen]);
 
-  const selectLang = (lang) => {
-    onChangeLanguage(lang);
-    setLangOpen(false);
-  };
-
   const navLinks = [
     { label: 'Platform', href: '#features' },
     { label: 'Workflow', href: '#how-it-works' },
-    { label: 'Tech Stack', href: '#tech-stack' },
+    { label: 'Architecture', href: '#tech-stack' },
   ];
 
   return (
     <>
       <motion.header 
         className={`${styles.navContainer} ${scrolled ? styles.scrolled : ''}`}
-        initial={{ opacity: 0, y: -20 }}
+        initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: 'easeOut', delay: 0.1 }}
+        transition={{ duration: 0.4, ease: 'easeOut' }}
       >
         <div className={styles.navInner}>
 
-          {/* Brand logo */}
+          {/* Brand logo (Pure wordmark, no icon) */}
           <div
             className={styles.logo}
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             role="button"
             tabIndex={0}
           >
-            <div className={styles.logoIcon}>
-              <Shield size={14} className={styles.shieldIcon} />
-            </div>
             <span className={styles.logoText}>
-              AUTO<span className={styles.logoCyan}>SHIELD</span><span className={styles.logoDot}>.</span>
+              AUTO<span className={styles.logoCyan}>SHIELD.</span>
             </span>
           </div>
 
@@ -81,39 +59,15 @@ export default function Navbar({ onOpenAuth, currentLanguage, onChangeLanguage }
           {/* Actions */}
           <div className={styles.actions}>
 
-            {/* Language dropdown */}
-            <div className={styles.langWrapper} data-lang-dropdown>
-              <button
-                className={styles.langToggle}
-                onClick={() => setLangOpen(v => !v)}
-                aria-haspopup="listbox"
-                aria-expanded={langOpen}
-              >
-                <span className={styles.langCode}>{LANG_CODES[currentLanguage]}</span>
-                <span className={styles.langLabel}>A/अ</span>
-                <ChevronDown size={12} className={`${styles.chevron} ${langOpen ? styles.chevronOpen : ''}`} />
-              </button>
-              {langOpen && (
-                <div className={styles.langDropdown} role="listbox">
-                  {LANGS.map(lang => (
-                    <button
-                      key={lang}
-                      role="option"
-                      aria-selected={lang === currentLanguage}
-                      className={`${styles.langOption} ${lang === currentLanguage ? styles.langOptionActive : ''}`}
-                      onClick={() => selectLang(lang)}
-                    >
-                      {lang}
-                    </button>
-                  ))}
-                </div>
-              )}
+            {/* v2.0 Nominal Infrastructure Status Pill */}
+            <div className={styles.statusPill}>
+              <span className={styles.statusDot} />
+              <span className={styles.statusText}>System Nominal</span>
             </div>
 
             <button
               className={styles.signInButton}
               onClick={() => onOpenAuth('signin')}
-              data-hover="true"
             >
               Access Console
             </button>
@@ -122,7 +76,7 @@ export default function Navbar({ onOpenAuth, currentLanguage, onChangeLanguage }
               className={`${styles.ctaButton} magnetic-btn`}
               onClick={() => onOpenAuth('signup', 'customer')}
             >
-              <span className={styles.ctaBtnInner}>Get Cover</span>
+              <span className={styles.ctaBtnInner}>Start Free →</span>
               <span className={styles.ctaBtnGlow} />
             </button>
 
@@ -153,10 +107,7 @@ export default function Navbar({ onOpenAuth, currentLanguage, onChangeLanguage }
       >
         <div className={styles.drawerHeader}>
           <div className={styles.logo}>
-            <div className={styles.logoIcon}>
-              <Shield size={14} className={styles.shieldIcon} />
-            </div>
-            <span className={styles.logoText}>AUTO<span className={styles.logoCyan}>SHIELD</span></span>
+            <span className={styles.logoText}>AUTO<span className={styles.logoCyan}>SHIELD.</span></span>
           </div>
           <button
             className={styles.drawerClose}
@@ -186,19 +137,9 @@ export default function Navbar({ onOpenAuth, currentLanguage, onChangeLanguage }
         <div className={styles.drawerDivider} />
 
         <div className={styles.drawerActions}>
-          <div className={styles.drawerLangGroup}>
-            <span className={styles.drawerLangLabel}>Language</span>
-            <div className={styles.drawerLangRow}>
-              {LANGS.map(lang => (
-                <button
-                  key={lang}
-                  className={`${styles.drawerLangBtn} ${lang === currentLanguage ? styles.drawerLangActive : ''}`}
-                  onClick={() => { onChangeLanguage(lang); setMenuOpen(false); }}
-                >
-                  {LANG_CODES[lang]}
-                </button>
-              ))}
-            </div>
+          <div className={styles.drawerStatusPill}>
+            <span className={styles.statusDot} />
+            <span className={styles.statusText}>System Nominal</span>
           </div>
 
           <button
@@ -211,7 +152,7 @@ export default function Navbar({ onOpenAuth, currentLanguage, onChangeLanguage }
             className={styles.drawerCtaBtn}
             onClick={() => { setMenuOpen(false); onOpenAuth('signup', 'customer'); }}
           >
-            Get Cover →
+            Start Free →
           </button>
         </div>
       </div>

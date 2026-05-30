@@ -1,55 +1,97 @@
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { UploadCloud, CheckCircle2, AlertTriangle, Landmark, Terminal } from 'lucide-react';
+import { UploadCloud, CheckCircle2, Landmark, Terminal, UserCheck } from 'lucide-react';
+import { useInView } from 'react-intersection-observer';
 import styles from './HowItWorks.module.css';
+
+function AnimatedPayoutDisbursement() {
+  const [payoutVal, setPayoutVal] = useState(0);
+  const { ref, inView } = useInView({ triggerOnce: false, threshold: 0.2 });
+
+  useEffect(() => {
+    if (inView) {
+      let start = 0;
+      const end = 47500;
+      const steps = 40;
+      const dec = end / steps;
+      const timer = setInterval(() => {
+        start += dec;
+        if (start >= end) {
+          clearInterval(timer);
+          setPayoutVal(end);
+        } else {
+          setPayoutVal(Math.floor(start));
+        }
+      }, 25);
+      return () => clearInterval(timer);
+    } else {
+      setPayoutVal(0);
+    }
+  }, [inView]);
+
+  return (
+    <div ref={ref} className={styles.payoutContainer}>
+      <CheckCircle2 size={32} className={styles.checkmarkIconAnim} />
+      <span className={styles.payoutAmountText}>₹{payoutVal.toLocaleString('en-IN')} DISBURSED</span>
+      <span className={styles.payoutTxnRef}>TXN // AS-9081-LGR</span>
+    </div>
+  );
+}
 
 export default function HowItWorks() {
   const timelineRef = useRef(null);
+  const [activeStep, setActiveStep] = useState(0);
+  
   const { scrollYProgress } = useScroll({
     target: timelineRef,
     offset: ["start center", "end center"]
   });
+  
   const scaleY = useTransform(scrollYProgress, [0, 1], [0, 1]);
-
+ 
   const steps = [
     {
       num: "01",
+      numLabel: "Step 01",
       title: "Submit Claim",
-      description: "Upload your vehicle photo and fill in the claim details. The platform accepts standard image formats instantly.",
+      description: "Upload your vehicle photo and claim details. The platform accepts standard mobile photography formats instantly.",
       icon: UploadCloud,
       visualType: "upload"
     },
     {
       num: "02",
+      numLabel: "Step 02",
       title: "AI Analysis",
-      description: "Computer vision scans for damage. Risk scoring evaluates fraud signals. Both happen in parallel, in under a second.",
+      description: "Computer vision classification scans for structural anomalies while risk algorithms flag anomalies concurrently in under 1 second.",
       icon: Terminal,
       visualType: "scan"
     },
     {
       num: "03",
+      numLabel: "Step 03",
       title: "Expert Review",
-      description: "Your technician sees AI-generated insights — damage severity, confidence scores, fraud probability — and makes the final call.",
-      icon: AlertTriangle,
-      visualType: "fraud"
+      description: "Adjusters review automatically sorted diagnostics—confidence factors and severity parameters—to execute instant secure approvals.",
+      icon: UserCheck,
+      visualType: "review"
     },
     {
       num: "04",
+      numLabel: "Step 04",
       title: "Instant Payout",
-      description: "Once approved, the payout is calculated to the rupee. Your customer receives a detailed AI-written summary of the decision.",
-      icon: CheckCircle2,
+      description: "Calculated repair disbursements are processed down to the single rupee. SECURE ledger hashes execute direct wire settle logs.",
+      icon: Landmark,
       visualType: "payout"
     }
   ];
-
+ 
   const renderStepVisual = (type) => {
     switch (type) {
       case "upload":
         return (
           <div className={styles.visualBox}>
-            <UploadCloud className="w-8 h-8 text-[#00D4FF] mb-2" />
-            <span className={styles.visualText}>SELECT_IMAGE.PNG</span>
-            <span className={styles.visualSubtext}>Size: 4.2 MB // FORMAT: RAW</span>
+            <div className={styles.uploadZone}>
+              <UploadCloud className={styles.uploadIconAnim} size={32} />
+            </div>
           </div>
         );
       case "scan":
@@ -58,34 +100,30 @@ export default function HowItWorks() {
             <div className={styles.miniScanFrame}>
               <div className={styles.miniScanSweep} />
               <div className={styles.miniCar}>
-                <svg viewBox="0 0 100 40" style={{ width: '80%' }}>
-                  <path d="M10,22 C20,22 30,17 40,15 C55,10 75,10 85,18 C90,22 90,25 90,30 L10,30 Z" fill="none" stroke="rgba(0, 212, 255, 0.3)" strokeWidth="1" />
-                  <rect x="25" y="14" width="10" height="7" rx="1" fill="rgba(239, 68, 68, 0.15)" stroke="#EF4444" strokeWidth="0.5" />
+                <svg viewBox="0 0 100 45" style={{ width: '80%' }}>
+                  <path 
+                    d="M10,25 C15,25 18,22 25,20 C32,18 45,12 60,12 C75,12 82,18 85,22 C88,25 90,26 92,28 C94,30 95,33 93,35 C90,38 85,38 80,38 L20,38 C15,38 12,37 10,35 C8,33 8,28 10,25 Z" 
+                    fill="none" 
+                    stroke="#CBD5E1" 
+                    strokeWidth="1" 
+                  />
+                  <rect x="24" y="16" width="14" height="9" rx="1.5" fill="rgba(220, 38, 38, 0.08)" stroke="#DC2626" strokeWidth="0.75" />
                 </svg>
               </div>
             </div>
           </div>
         );
-      case "fraud":
+      case "review":
         return (
           <div className={styles.visualBox}>
-            <div className={styles.miniRiskGroup}>
-              <span className={styles.riskLabel}>Fraud Probability</span>
-              <span className={styles.riskPct} style={{ color: 'var(--green)' }}>8.3% [LOW]</span>
-              <div className={styles.riskBar}>
-                <div className={styles.riskProg} style={{ width: '8.3%', backgroundColor: 'var(--green)' }} />
-              </div>
+            <div className={styles.interfaceButtons}>
+              <button className={styles.btnApprove}>Approve</button>
+              <button className={styles.btnReject}>Reject</button>
             </div>
           </div>
         );
       case "payout":
-        return (
-          <div className={styles.visualBox}>
-            <CheckCircle2 className="w-8 h-8 text-[#10B981] mb-2" />
-            <span className={styles.visualTextGreen}>₹47,500 DISBURSED</span>
-            <span className={styles.visualSubtext}>TX: SECURE_LEDGER_A982</span>
-          </div>
-        );
+        return <AnimatedPayoutDisbursement />;
       default:
         return null;
     }
@@ -95,7 +133,11 @@ export default function HowItWorks() {
     <section id="how-it-works" className={styles.section}>
       <div className={styles.container}>
         <div className={styles.header}>
-          <span className={styles.sub}>[ WORKFLOW ]</span>
+          <span className={styles.sub}>
+            <span className={styles.subBrackets}>[</span>
+            <span className={styles.subText}>WORKFLOW</span>
+            <span className={styles.subBrackets}>]</span>
+          </span>
           <h2 className={styles.title}>From Photo to Payout.</h2>
           <p className={styles.description}>
             Four automated steps. One seamless experience.
@@ -116,9 +158,11 @@ export default function HowItWorks() {
               const isEven = index % 2 === 1;
 
               return (
-                <div 
+                <motion.div 
                   key={index} 
                   className={`${styles.stepRow} ${isEven ? styles.rowEven : styles.rowOdd}`}
+                  onViewportEnter={() => setActiveStep(index)}
+                  viewport={{ amount: 0.6 }}
                 >
                   {/* Visual Card (odd: left, even: right) */}
                   <motion.div 
@@ -128,22 +172,16 @@ export default function HowItWorks() {
                     viewport={{ once: true, margin: "-10%" }}
                     transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
                   >
-                    <div className={styles.stepVisualCard}>
+                    <div className={`${styles.stepVisualCard} ${activeStep === index ? styles.cardActive : ''}`}>
                       {renderStepVisual(step.visualType)}
                     </div>
                   </motion.div>
 
                   {/* Centered Number Indicator bubble */}
                   <div className={styles.centerCol}>
-                    <motion.div 
-                      className={styles.numberCircle}
-                      initial={{ scale: 0.8, opacity: 0 }}
-                      whileInView={{ scale: 1, opacity: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.4 }}
-                    >
+                    <div className={`${styles.numberCircle} ${activeStep === index ? styles.numberCircleActive : ''}`}>
                       <span className={styles.numberText}>{step.num}</span>
-                    </motion.div>
+                    </div>
                   </div>
 
                   {/* Text Details (odd: right, even: left) */}
@@ -156,15 +194,15 @@ export default function HowItWorks() {
                   >
                     <div className={styles.contentBox}>
                       <div className={styles.stepHeader}>
-                        <div className={styles.iconCircle}>
-                          <StepIcon className="w-4 h-4 text-[#00D4FF]" />
+                        <div className={`${styles.iconCircle} ${activeStep === index ? styles.iconCircleActive : ''}`}>
+                          <StepIcon size={16} className={styles.stepIconElement} />
                         </div>
-                        <h3 className={styles.stepTitle}>{step.title}</h3>
+                        <h3 className={`${styles.stepTitle} ${activeStep === index ? styles.titleActive : ''}`}>{step.title}</h3>
                       </div>
                       <p className={styles.stepDescription}>{step.description}</p>
                     </div>
                   </motion.div>
-                </div>
+                </motion.div>
               );
             })}
           </div>
